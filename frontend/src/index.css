@@ -1,0 +1,53 @@
+@import './styles/theme.css';
+
+body {
+  margin: 0;
+}
+
+a {
+  color: var(--color-azul-turquesa);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+/* Tarjetas con “zoom” */
+.card-zoom {
+  transition: transform 180ms ease, box-shadow 180ms ease;
+  will-change: transform;
+}
+
+.card-zoom:hover {
+  transform: translateY(-2px) scale(1.02);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+}
+
+/* Imagenes dentro de tarjetas */
+.card-img {
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+  border-radius: 12px;
+  border: 2px solid var(--color-gris-claro);
+}
+
+/* Botón primario “Agendar Cita” */
+.btn-primary {
+  appearance: none;
+  border: none;
+  background: var(--color-amarillo-optica);
+  color: #1a1a1a;
+  font-weight: 600;
+  padding: 10px 14px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: transform 120ms ease, filter 120ms ease, box-shadow 120ms ease;
+}
+
+.btn-primary:hover {
+  transform: translateY(-1px);
+  filter: brightness(0.97);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.08);
+}

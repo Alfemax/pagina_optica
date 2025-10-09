@@ -1,0 +1,69 @@
+/* Importar las fuentes desde Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Montserrat:wght@400;500;600&family=Roboto:wght@300;400;500;700&display=swap');
+
+:root {
+  /* Paleta principal */
+  --color-amarillo-optica: #F6D94A;
+  --color-verde-claro: #A4D65E;
+  --color-blanco: #FFFFFF;
+  --color-gris-claro: #E0E0E0;
+  --color-gris-oscuro: #333333;
+  --color-azul-turquesa: #3ABEC9;
+  --color-negro: #000000;
+
+  /* Colores de apoyo */
+  --color-verde-menta: #4CAF50;
+  --color-rojo-suave: #E57373;
+  --color-azul-suave: #64B5F6;
+
+  /* Tipografías */
+  --font-heading: 'Poppins', sans-serif;
+  /* Titulares */
+  --font-subtitle: 'Montserrat', sans-serif;
+  /* Subtítulos y menús */
+  --font-body: 'Roboto', sans-serif;
+  /* Texto principal */
+}
+
+/* Estilos globales */
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-blanco);
+  color: var(--color-gris-oscuro);
+  margin: 0;
+  padding: 0;
+}
+
+/* Titulares */
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-heading);
+  margin: 0 0 0.5em 0;
+}
+
+/* Subtítulos y navegación */
+nav,
+.subtitle {
+  font-family: var(--font-subtitle);
+}
+
+/* Botones */
+button {
+  font-family: var(--font-body);
+  background-color: var(--color-amarillo-optica);
+  color: var(--color-negro);
+  border: none;
+  border-radius: 8px;
+  padding: 0.6em 1.2em;
+  cursor: pointer;
+  transition: background-color 0.2s ease-in-out;
+}
+
+button:hover {
+  background-color: var(--color-azul-turquesa);
+  color: var(--color-blanco);
+}
