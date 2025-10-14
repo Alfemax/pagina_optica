@@ -6,8 +6,17 @@ export default function Navbar() {
   const { usuario, rol, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const menuRef = useRef(null);
   const btnRef = useRef(null);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   useEffect(() => {
     function onClickOutside(e) {
@@ -41,52 +50,115 @@ export default function Navbar() {
     padding: '6px 2px',
     fontFamily: 'var(--font-subtitle)',
     opacity: isActive ? 1 : 0.9,
+    fontSize: isMobile ? '0.85rem' : '0.95rem',
   });
 
   return (
-    <header style={wrap}>
-      <nav style={bar}>
-        <Link to="/" style={brand}>
-          <span style={logoWrap}>
+    <header style={{
+      ...wrap,
+      padding: isMobile ? '10px 16px' : '12px 20px',
+    }}>
+      <nav style={{
+        ...bar,
+        padding: isMobile ? '10px 0' : '12px 20px',
+        gap: isMobile ? 8 : 16,
+        flexWrap: isMobile ? 'wrap' : 'nowrap',
+      }}>
+        <Link to="/" style={{
+          ...brand,
+          gap: isMobile ? 8 : 12,
+          flex: isMobile ? '1' : 'none',
+        }}>
+          <span style={{
+            ...logoWrap,
+            width: isMobile ? 32 : 36,
+            height: isMobile ? 32 : 36,
+          }}>
             <img
               src="/images/logo-optica.png"
               alt="Clínica El Áncora"
-              width="36"
-              height="36"
+              width={isMobile ? 32 : 36}
+              height={isMobile ? 32 : 36}
               style={logoImg}
             />
             <span style={glow} aria-hidden />
           </span>
-          <span style={brandText}>Clínica El Áncora</span>
+          {!isMobile && <span style={brandText}>Clínica El Áncora</span>}
         </Link>
 
         {!usuario ? (
-          <div style={linksWrap}>
-            <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
-            <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
-            <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
-            <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
-            <NavItem to="/login" styleFn={linkStyle}>Iniciar Sesión</NavItem>
-            <NavItem to="/registro" styleFn={linkStyle} accent>¡Regístrate!</NavItem>
-          </div>
+          <>
+            {isMobile ? (
+              <div style={{
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(3, 1fr)',
+                gap: 8,
+                marginTop: 8,
+              }}>
+                <NavItem to="/" styleFn={linkStyle} isMobile={isMobile}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} isMobile={isMobile}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} isMobile={isMobile}>¿Quiénes?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} isMobile={isMobile}>Agendar</NavItem>
+                <NavItem to="/login" styleFn={linkStyle} isMobile={isMobile}>Sesión</NavItem>
+                <NavItem to="/registro" styleFn={linkStyle} accent isMobile={isMobile}>¡Regístrate!</NavItem>
+              </div>
+            ) : (
+              <div style={linksWrap}>
+                <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
+                <NavItem to="/login" styleFn={linkStyle}>Iniciar Sesión</NavItem>
+                <NavItem to="/registro" styleFn={linkStyle} accent>¡Regístrate!</NavItem>
+              </div>
+            )}
+          </>
         ) : (
-          <div style={authWrap}>
-            <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
-            <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
-            <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
-            <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
+          <>
+            {isMobile ? (
+              <div style={{
+                width: '100%',
+                display: 'grid',
+                gridTemplateColumns: 'repeat(2, 1fr)',
+                gap: 8,
+                marginTop: 8,
+              }}>
+                <NavItem to="/" styleFn={linkStyle} isMobile={isMobile}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} isMobile={isMobile}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} isMobile={isMobile}>¿Quiénes?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} isMobile={isMobile}>Agendar</NavItem>
+              </div>
+            ) : (
+              <div style={authWrap}>
+                <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
+              </div>
+            )}
 
             <div style={{ position: 'relative' }}>
               <button
                 ref={btnRef}
                 onClick={() => setOpen(v => !v)}
                 className="btn"
-                style={userBtn}
+                style={{
+                  ...userBtn,
+                  padding: isMobile ? '6px 10px' : '8px 12px',
+                  fontSize: isMobile ? '0.8rem' : '0.95rem',
+                  gap: isMobile ? 6 : 10,
+                }}
                 aria-haspopup="menu"
                 aria-expanded={open}
               >
-                <span style={avatar} aria-hidden>{(usuario || 'U')[0].toUpperCase()}</span>
-                <span style={{ whiteSpace:'nowrap' }}>Hola, {usuario}</span>
+                <span style={{
+                  ...avatar,
+                  width: isMobile ? 22 : 26,
+                  height: isMobile ? 22 : 26,
+                }} aria-hidden>{(usuario || 'U')[0].toUpperCase()}</span>
+                {!isMobile && <span style={{ whiteSpace:'nowrap' }}>Hola, {usuario}</span>}
+                {isMobile && <span style={{ whiteSpace:'nowrap' }}>Menú</span>}
                 <span style={caret(open)} aria-hidden>▾</span>
               </button>
 
@@ -94,37 +166,40 @@ export default function Navbar() {
                 <div
                   ref={menuRef}
                   role="menu"
-                  style={menu}
+                  style={{
+                    ...menu,
+                    minWidth: isMobile ? '200px' : '220px',
+                    right: isMobile ? '-8px' : 0,
+                  }}
                 >
                   {rol === 1 && (
-                    <Link to="/admin" onClick={()=>setOpen(false)} style={item} role="menuitem">
+                    <Link to="/admin" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
                       <span>Dashboard Admin</span>
                     </Link>
                   )}
                   {rol === 2 && (
-                    <Link to="/optometrista" onClick={()=>setOpen(false)} style={item} role="menuitem">
+                    <Link to="/optometrista" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
                       <span>Dashboard Optometrista</span>
                     </Link>
                   )}
 
-                  <Link to="/perfil" onClick={()=>setOpen(false)} style={item} role="menuitem">
+                  <Link to="/perfil" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
                     Configurar perfil
                   </Link>
 
-                  {/* CAMBIO: si es PACIENTE (rol 3), “Ver citas” abre el dashboard del paciente */}
                   {rol === 3 ? (
-                    <Link to="/paciente" onClick={()=>setOpen(false)} style={item} role="menuitem">
+                    <Link to="/paciente" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
                       Mis citas
                     </Link>
                   ) : (
-                    <Link to="/citas" onClick={()=>setOpen(false)} style={item} role="menuitem">
+                    <Link to="/citas" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
                       Ver citas
                     </Link>
                   )}
 
                   <button
                     onClick={handleLogout}
-                    style={{ ...item, width:'100%', textAlign:'left', background:'transparent', border:'none' }}
+                    style={{ ...item, width:'100%', textAlign:'left', background:'transparent', border:'none', fontSize: isMobile ? '0.85rem' : '0.95rem' }}
                     role="menuitem"
                   >
                     Cerrar sesión
@@ -132,7 +207,7 @@ export default function Navbar() {
                 </div>
               )}
             </div>
-          </div>
+          </>
         )}
       </nav>
 
@@ -141,7 +216,7 @@ export default function Navbar() {
   );
 }
 
-function NavItem({ to, children, styleFn, accent }) {
+function NavItem({ to, children, styleFn, accent, isMobile }) {
   return (
     <NavLink to={to} style={styleFn} className={accent ? 'nav-accent' : 'nav-link'}>
       <span className="nav-underline">{children}</span>
@@ -162,31 +237,29 @@ const wrap = {
 const bar = {
   maxWidth: 1200,
   margin: '0 auto',
-  padding: '12px 20px',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
-  gap: 16,
 };
-const brand = { display: 'flex', alignItems: 'center', gap: 12, textDecoration: 'none', color: 'inherit' };
+const brand = { display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' };
 const brandText = { fontFamily: 'var(--font-heading)', fontWeight: 800, letterSpacing: '.2px' };
-const logoWrap = { position: 'relative', width: 36, height: 36, borderRadius: 10, overflow: 'hidden', boxShadow: '0 8px 18px rgba(0,0,0,0.08)' };
+const logoWrap = { position: 'relative', borderRadius: 10, overflow: 'hidden', boxShadow: '0 8px 18px rgba(0,0,0,0.08)' };
 const logoImg = { width: '100%', height: '100%', objectFit: 'cover', display: 'block' };
 const glow = { position: 'absolute', inset: -20, background: 'radial-gradient(40px 40px at 30% 30%, rgba(37,99,235,.35), transparent)', pointerEvents: 'none' };
 const linksWrap = { display: 'flex', gap: 18, alignItems: 'center', fontFamily: 'var(--font-subtitle)' };
 const authWrap  = { display: 'flex', gap: 18, alignItems: 'center' };
 const userBtn = {
-  display: 'flex', alignItems: 'center', gap: 10,
+  display: 'flex', alignItems: 'center',
   background: 'linear-gradient(135deg, #0096c7, #00b4d8)',
-  color: '#fff', border: 'none', padding: '8px 12px',
+  color: '#fff', border: 'none',
   borderRadius: 12, boxShadow: '0 10px 22px rgba(0,150,199,0.25)',
   cursor: 'pointer', transition: 'transform .15s ease', willChange: 'transform'
 };
-const avatar = { width: 26, height: 26, borderRadius: 999, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.2)', fontWeight: 700 };
+const avatar = { borderRadius: 999, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.2)', fontWeight: 700 };
 const caret = (open) => ({ marginLeft: 2, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .18s ease' });
 const menu = {
-  position: 'absolute', right: 0, marginTop: 10, background: '#fff',
-  border: '1px solid rgba(0,0,0,0.06)', borderRadius: 14, minWidth: 220,
+  position: 'absolute', marginTop: 10, background: '#fff',
+  border: '1px solid rgba(0,0,0,0.06)', borderRadius: 14,
   boxShadow: '0 18px 38px rgba(0,0,0,0.08)', zIndex: 50, overflow: 'hidden'
 };
 const item = {

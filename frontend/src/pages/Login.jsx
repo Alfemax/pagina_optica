@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { api } from "../services/api";
 import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
@@ -10,8 +10,17 @@ export default function Login() {
   const [password, setPassword] = useState("");
   const [msg, setMsg] = useState("");
   const [forgotOpen, setForgotOpen] = useState(false);
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
   const { login } = useAuth();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -60,6 +69,7 @@ export default function Login() {
           color:#fff; font-weight:600; letter-spacing:.2px;
           box-shadow: 0 8px 22px rgba(6,182,212,.35);
           transition: transform .08s ease, box-shadow .2s ease;
+          width: 100%;
         }
         .btn-primary:hover { box-shadow: 0 10px 26px rgba(6,182,212,.45); }
         .btn-primary:active { transform: translateY(1px); }
@@ -71,14 +81,14 @@ export default function Login() {
 
       <div
         style={{
-          minHeight: "calc(100vh - 120px)", // deja espacio si Navbar/Footer existen
+          minHeight: "calc(100vh - 120px)",
           display: "grid",
           placeItems: "center",
           background:
             "radial-gradient(1200px 600px at 10% 10%, #ecfeff 0%, transparent 60%), radial-gradient(1200px 600px at 90% 90%, #fef9c3 0%, transparent 60%), linear-gradient(180deg, #f8fafc 0%, #ffffff 100%)",
           position: "relative",
           overflow: "hidden",
-          padding: "24px 16px",
+          padding: isMobile ? "16px 12px" : "24px 16px",
         }}
       >
         <div className="blurball" />
@@ -93,7 +103,7 @@ export default function Login() {
           style={{
             width: "100%",
             maxWidth: 980,
-            borderRadius: 20,
+            borderRadius: isMobile ? 16 : 20,
             overflow: "hidden",
             position: "relative",
           }}
@@ -102,102 +112,140 @@ export default function Login() {
           <div
             style={{
               display: "grid",
-              gridTemplateColumns: "1.1fr 1fr",
+              gridTemplateColumns: isMobile ? "1fr" : "1.1fr 1fr",
               gap: 0,
             }}
           >
             {/* LADO IZQUIERDO (branding) */}
-            <div
-              style={{
-                padding: 28,
-                background:
-                  "radial-gradient(800px 400px at -10% -10%, rgba(34,211,238,.35) 0%, transparent 50%), linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
-                borderRight: "1px solid rgba(0,0,0,.06)",
-                display: "flex",
-                flexDirection: "column",
-                justifyContent: "space-between",
-                minHeight: 420,
-              }}
-            >
-              <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
-                <img
-                  src="/images/logo-optica.png"
-                  alt="Clínica El Áncora"
-                  width="42"
-                  height="42"
-                  style={{ borderRadius: 10, objectFit: "cover" }}
-                />
-                <div>
-                  <h2 style={{ margin: 0, fontFamily: "var(--font-heading)" }}>
-                    Clínica El Áncora
-                  </h2>
-                  <small style={{ opacity: 0.7 }}>
-                    Plataforma de Gestión Optométrica
-                  </small>
-                </div>
-              </div>
-
-              <div style={{ marginTop: 16 }}>
-                <h3 style={{ margin: "0 0 6px 0", fontFamily: "var(--font-heading)" }}>
-                  Bienvenido de nuevo
-                </h3>
-                <p style={{ margin: 0, opacity: 0.8 }}>
-                  Inicia sesión para gestionar citas, pacientes y fichas médicas
-                  de forma ágil y segura.
-                </p>
-              </div>
-
+            {!isMobile && (
               <div
                 style={{
-                  marginTop: 16,
-                  display: "grid",
-                  gridTemplateColumns: "repeat(3,1fr)",
-                  gap: 10,
+                  padding: 28,
+                  background:
+                    "radial-gradient(800px 400px at -10% -10%, rgba(34,211,238,.35) 0%, transparent 50%), linear-gradient(180deg, #ffffff 0%, #f8fafc 100%)",
+                  borderRight: "1px solid rgba(0,0,0,.06)",
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "space-between",
+                  minHeight: 420,
                 }}
               >
-                {[
-                  "Citas inteligentes",
-                  "Fichas digitales",
-                  "Reportes básicos",
-                ].map((tag) => (
-                  <div
-                    key={tag}
-                    style={{
-                      background: "#ffffff",
-                      border: "1px solid #eef2f5",
-                      padding: "8px 10px",
-                      borderRadius: 12,
-                      textAlign: "center",
-                      fontSize: 12,
-                      boxShadow: "0 6px 18px rgba(0,0,0,.05)",
-                    }}
-                  >
-                    {tag}
+                <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+                  <img
+                    src="/images/logo-optica.png"
+                    alt="Clínica El Áncora"
+                    width="42"
+                    height="42"
+                    style={{ borderRadius: 10, objectFit: "cover" }}
+                  />
+                  <div>
+                    <h2 style={{ margin: 0, fontFamily: "var(--font-heading)" }}>
+                      Clínica El Áncora
+                    </h2>
+                    <small style={{ opacity: 0.7 }}>
+                      Plataforma de Gestión Optométrica
+                    </small>
                   </div>
-                ))}
-              </div>
+                </div>
 
-              <small style={{ opacity: 0.6 }}>
-                ¿No tienes cuenta?{" "}
-                <Link className="link" to="/registro">
-                  Regístrate
-                </Link>
-              </small>
-            </div>
+                <div style={{ marginTop: 16 }}>
+                  <h3 style={{ margin: "0 0 6px 0", fontFamily: "var(--font-heading)" }}>
+                    Bienvenido de nuevo
+                  </h3>
+                  <p style={{ margin: 0, opacity: 0.8 }}>
+                    Inicia sesión para gestionar citas, pacientes y fichas médicas
+                    de forma ágil y segura.
+                  </p>
+                </div>
+
+                <div
+                  style={{
+                    marginTop: 16,
+                    display: "grid",
+                    gridTemplateColumns: "repeat(3,1fr)",
+                    gap: 10,
+                  }}
+                >
+                  {[
+                    "Citas inteligentes",
+                    "Fichas digitales",
+                    "Reportes básicos",
+                  ].map((tag) => (
+                    <div
+                      key={tag}
+                      style={{
+                        background: "#ffffff",
+                        border: "1px solid #eef2f5",
+                        padding: "8px 10px",
+                        borderRadius: 12,
+                        textAlign: "center",
+                        fontSize: 12,
+                        boxShadow: "0 6px 18px rgba(0,0,0,.05)",
+                      }}
+                    >
+                      {tag}
+                    </div>
+                  ))}
+                </div>
+
+                <small style={{ opacity: 0.6 }}>
+                  ¿No tienes cuenta?{" "}
+                  <Link className="link" to="/registro">
+                    Regístrate
+                  </Link>
+                </small>
+              </div>
+            )}
 
             {/* LADO DERECHO (formulario) */}
-            <div style={{ padding: 28 }}>
+            <div style={{ 
+              padding: isMobile ? 20 : 28,
+              display: "flex",
+              flexDirection: "column",
+              justifyContent: isMobile ? "flex-start" : "center",
+              minHeight: isMobile ? "auto" : 420,
+            }}>
+              {isMobile && (
+                <div style={{ 
+                  display: "flex", 
+                  alignItems: "center", 
+                  gap: 12,
+                  marginBottom: 20,
+                  paddingBottom: 16,
+                  borderBottom: "1px solid rgba(0,0,0,.06)",
+                }}>
+                  <img
+                    src="/images/logo-optica.png"
+                    alt="Clínica El Áncora"
+                    width="36"
+                    height="36"
+                    style={{ borderRadius: 8, objectFit: "cover" }}
+                  />
+                  <div>
+                    <h2 style={{ margin: 0, fontFamily: "var(--font-heading)", fontSize: "1rem" }}>
+                      Clínica El Áncora
+                    </h2>
+                  </div>
+                </div>
+              )}
+
               <form
                 onSubmit={onSubmit}
                 style={{
                   display: "grid",
                   gap: 14,
-                  alignContent: "center",
-                  minHeight: 420,
+                  width: "100%",
                 }}
               >
                 <div>
-                  <label className="subtitle">Correo electrónico</label>
+                  <label style={{ 
+                    display: "block",
+                    marginBottom: 6,
+                    fontWeight: 500,
+                    fontSize: isMobile ? "0.85rem" : "0.95rem",
+                  }}>
+                    Correo electrónico
+                  </label>
                   <input
                     className="field"
                     type="email"
@@ -210,7 +258,14 @@ export default function Login() {
                 </div>
 
                 <div>
-                  <label className="subtitle">Contraseña</label>
+                  <label style={{ 
+                    display: "block",
+                    marginBottom: 6,
+                    fontWeight: 500,
+                    fontSize: isMobile ? "0.85rem" : "0.95rem",
+                  }}>
+                    Contraseña
+                  </label>
                   <input
                     className="field"
                     type="password"
@@ -230,7 +285,7 @@ export default function Login() {
                         padding: 0,
                         color: "#0284c7",
                         cursor: "pointer",
-                        fontSize: 13,
+                        fontSize: isMobile ? "0.75rem" : "0.8rem",
                       }}
                     >
                       ¿Olvidaste tu contraseña?
@@ -252,6 +307,7 @@ export default function Login() {
                       border: "1px solid #fecaca",
                       padding: "8px 10px",
                       borderRadius: 10,
+                      fontSize: isMobile ? "0.8rem" : "0.85rem",
                     }}
                   >
                     {msg}
@@ -264,7 +320,7 @@ export default function Login() {
                     display: "flex",
                     gap: 8,
                     alignItems: "center",
-                    fontSize: 12,
+                    fontSize: isMobile ? "0.75rem" : "0.85rem",
                     color: "#64748b",
                   }}
                 >
@@ -280,6 +336,20 @@ export default function Login() {
                   />
                   Conexión segura y cifrada
                 </div>
+
+                {isMobile && (
+                  <small style={{ 
+                    marginTop: 12, 
+                    textAlign: "center", 
+                    opacity: 0.7,
+                    fontSize: "0.8rem",
+                  }}>
+                    ¿No tienes cuenta?{" "}
+                    <Link className="link" to="/registro">
+                      Regístrate
+                    </Link>
+                  </small>
+                )}
               </form>
             </div>
           </div>

@@ -1,7 +1,19 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 export default function Home() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <main>
       {/* HERO */}
@@ -9,10 +21,10 @@ export default function Home() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "40px 20px",
+          padding: isMobile ? "20px 12px" : "40px 20px",
           display: "grid",
-          gridTemplateColumns: "1fr 1.2fr",
-          gap: 24,
+          gridTemplateColumns: isMobile ? "1fr" : "1fr 1.2fr",
+          gap: isMobile ? 16 : 24,
           alignItems: "center",
         }}
       >
@@ -20,7 +32,7 @@ export default function Home() {
           <h1
             style={{
               fontFamily: "var(--font-heading)",
-              fontSize: "2.2rem",
+              fontSize: isMobile ? "1.3rem" : "2.2rem",
               margin: 0,
             }}
           >
@@ -40,7 +52,7 @@ export default function Home() {
           alt="Clínica El Áncora"
           style={{
             width: "100%",
-            height: 280,
+            height: isMobile ? 180 : 280,
             objectFit: "cover",
             borderRadius: 12,
             border: "2px solid var(--color-gris-claro)",
@@ -53,10 +65,10 @@ export default function Home() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "10px 20px 36px",
+          padding: isMobile ? "10px 12px 25px" : "10px 20px 36px",
           display: "grid",
-          gridTemplateColumns: "repeat(4, 1fr)",
-          gap: 16,
+          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(4, 1fr)",
+          gap: isMobile ? 10 : isTablet ? 12 : 16,
         }}
       >
         {[
@@ -81,7 +93,7 @@ export default function Home() {
               alt={titulo}
               style={{
                 width: "100%",
-                height: 140,
+                height: isMobile ? 120 : isTablet ? 120 : 140,
                 objectFit: "cover",
                 borderRadius: 12,
                 transition: "transform 0.3s ease",
@@ -92,12 +104,13 @@ export default function Home() {
             <div
               style={{
                 marginTop: 8,
-                padding: "8px 10px",
+                padding: isMobile ? "6px 8px" : "8px 10px",
                 background: "var(--color-blanco)",
                 border: "1px solid var(--color-gris-claro)",
                 borderRadius: 8,
                 fontFamily: "var(--font-subtitle)",
                 textAlign: "center",
+                fontSize: isMobile ? "0.85rem" : "1rem",
               }}
             >
               {titulo}

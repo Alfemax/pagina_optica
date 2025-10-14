@@ -9,6 +9,7 @@ export default function Register() {
   const [msg, setMsg] = useState("");
   const [countdown, setCountdown] = useState(5);
   const [code, setCode] = useState("");
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
 
   const [form, setForm] = useState({
     nombre: "",
@@ -16,6 +17,14 @@ export default function Register() {
     password: "",
     confirmPassword: "",
   });
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
 
   const isStrongPassword = (pw) =>
     /^(?=.*\d)(?=.*[!@#$%^&*()_\-+=[\]{};:'"\\|,.<>/?`~]).{6,}$/.test(pw || "");
@@ -70,34 +79,63 @@ export default function Register() {
   };
 
   return (
-    <div style={wrap}>
+    <div style={{
+      ...wrap,
+      minHeight: isMobile ? "calc(100vh - 120px)" : "60vh",
+      padding: isMobile ? "20px 12px" : "40px 20px",
+    }}>
       {/* Glow background */}
       <div style={gradientBlob} />
       <div style={gradientBlob2} />
 
       <motion.div
-        style={card}
+        style={{
+          ...card,
+          maxWidth: isMobile ? "100%" : 520,
+          padding: isMobile ? 16 : 18,
+        }}
         initial={{ opacity: 0, y: 12, scale: 0.98 }}
         animate={{ opacity: 1, y: 0, scale: 1 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
       >
-        <div style={brand}>
+        <div style={{
+          ...brand,
+          gap: isMobile ? 8 : 12,
+        }}>
           <img
             src="/images/logo-optica.png"
             alt="Clínica El Áncora"
-            style={{ width: 40, height: 40, borderRadius: 10, objectFit: "cover" }}
+            style={{ 
+              width: isMobile ? 36 : 40, 
+              height: isMobile ? 36 : 40, 
+              borderRadius: 10, 
+              objectFit: "cover" 
+            }}
           />
           <div>
-            <h2 style={{ margin: 0, fontFamily: "var(--font-heading)" }}>Crear cuenta</h2>
-            <small style={{ opacity: 0.8 }}>Bienvenido(a) a Clínica El Áncora</small>
+            <h2 style={{ 
+              margin: 0, 
+              fontFamily: "var(--font-heading)",
+              fontSize: isMobile ? "1.1rem" : "1.3rem",
+            }}>
+              Crear cuenta
+            </h2>
+            <small style={{ opacity: 0.8, fontSize: isMobile ? "0.75rem" : "0.85rem" }}>
+              Bienvenido(a) a Clínica El Áncora
+            </small>
           </div>
         </div>
 
-        <div style={{ marginTop: 18 }}>
-          <div style={progressBar}>
+        <div style={{ marginTop: isMobile ? 12 : 18 }}>
+          <div style={{
+            ...progressBar,
+            gap: isMobile ? 6 : 10,
+          }}>
             <div
               style={{
                 ...progressDot,
+                width: isMobile ? 10 : 12,
+                height: isMobile ? 10 : 12,
                 background: step !== "form" ? "var(--color-azul-turquesa)" : "#9ca3af",
               }}
               title="Registro"
@@ -105,12 +143,15 @@ export default function Register() {
             <div
               style={{
                 ...progressConnector,
+                width: isMobile ? 24 : 40,
                 background: step === "done" ? "var(--color-azul-turquesa)" : "#e5e7eb",
               }}
             />
             <div
               style={{
                 ...progressDot,
+                width: isMobile ? 10 : 12,
+                height: isMobile ? 10 : 12,
                 background: step === "code" || step === "done" ? "var(--color-azul-turquesa)" : "#9ca3af",
               }}
               title="Verificación"
@@ -123,55 +164,70 @@ export default function Register() {
             <motion.form
               key="form"
               onSubmit={submitRegister}
-              style={formCol}
+              style={{
+                ...formCol,
+                gap: isMobile ? 10 : 12,
+                marginTop: isMobile ? 12 : 16,
+              }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
               <Field
-                icon={<User2 size={18} />}
+                icon={<User2 size={isMobile ? 16 : 18} />}
                 placeholder="Nombre completo"
                 name="nombre"
                 value={form.nombre}
                 onChange={onChange}
                 autoFocus
+                isMobile={isMobile}
               />
               <Field
-                icon={<Mail size={18} />}
+                icon={<Mail size={isMobile ? 16 : 18} />}
                 placeholder="Correo electrónico"
                 name="email"
                 type="email"
                 value={form.email}
                 onChange={onChange}
+                isMobile={isMobile}
               />
 
               <Field
-                icon={<Lock size={18} />}
+                icon={<Lock size={isMobile ? 16 : 18} />}
                 placeholder="Contraseña (min 6, 1 número y 1 especial)"
                 name="password"
                 type="password"
                 value={form.password}
                 onChange={onChange}
+                isMobile={isMobile}
               />
               <Field
-                icon={<Lock size={18} />}
+                icon={<Lock size={isMobile ? 16 : 18} />}
                 placeholder="Confirmar contraseña"
                 name="confirmPassword"
                 type="password"
                 value={form.confirmPassword}
                 onChange={onChange}
+                isMobile={isMobile}
               />
 
-              <PasswordHints ok={isStrongPassword(form.password)} />
+              <PasswordHints ok={isStrongPassword(form.password)} isMobile={isMobile} />
 
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 className="btn"
-                style={{ ...btnPrimary, display: "inline-flex", alignItems: "center", gap: 8 }}
+                style={{ 
+                  ...btnPrimary, 
+                  display: "inline-flex", 
+                  alignItems: "center", 
+                  gap: 8,
+                  padding: isMobile ? "10px 12px" : "12px 14px",
+                  fontSize: isMobile ? "0.9rem" : "0.95rem",
+                }}
                 disabled={loading}
               >
-                {loading && <Loader2 className="spin" size={16} />}
+                {loading && <Loader2 className="spin" size={isMobile ? 14 : 16} />}
                 Crear cuenta
               </motion.button>
             </motion.form>
@@ -181,35 +237,62 @@ export default function Register() {
             <motion.form
               key="code"
               onSubmit={submitVerify}
-              style={formCol}
+              style={{
+                ...formCol,
+                gap: isMobile ? 10 : 12,
+                marginTop: isMobile ? 12 : 16,
+              }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
               <div style={{ display: "flex", alignItems: "center", gap: 8, marginBottom: 4 }}>
-                <ShieldCheck size={18} />
-                <span className="subtitle">Verificación por correo</span>
+                <ShieldCheck size={isMobile ? 16 : 18} />
+                <span style={{ 
+                  fontFamily: "var(--font-subtitle)",
+                  fontWeight: 600,
+                  fontSize: isMobile ? "0.9rem" : "0.95rem",
+                }}>
+                  Verificación por correo
+                </span>
               </div>
               <input
                 placeholder="Código de verificación (6 dígitos)"
                 value={code}
                 onChange={(e) => setCode(e.target.value.replace(/\D/g, "").slice(0, 6))}
                 required
-                style={inputBase}
+                style={{
+                  ...inputBase,
+                  padding: isMobile ? "10px 12px" : "12px 12px 12px 48px",
+                  fontSize: isMobile ? "0.9rem" : "0.95rem",
+                }}
               />
               <motion.button
                 whileTap={{ scale: 0.98 }}
                 className="btn"
-                style={{ ...btnPrimary, display: "inline-flex", alignItems: "center", gap: 8 }}
+                style={{ 
+                  ...btnPrimary, 
+                  display: "inline-flex", 
+                  alignItems: "center", 
+                  gap: 8,
+                  padding: isMobile ? "10px 12px" : "12px 14px",
+                  fontSize: isMobile ? "0.9rem" : "0.95rem",
+                }}
                 disabled={loading}
               >
-                {loading && <Loader2 className="spin" size={16} />}
+                {loading && <Loader2 className="spin" size={isMobile ? 14 : 16} />}
                 Verificar
               </motion.button>
 
-              <small style={{ display: "flex", alignItems: "center", gap: 6, opacity: 0.8 }}>
-                <TimerReset size={14} /> El código expira en 15 minutos.
+              <small style={{ 
+                display: "flex", 
+                alignItems: "center", 
+                gap: 6, 
+                opacity: 0.8,
+                fontSize: isMobile ? "0.75rem" : "0.85rem",
+              }}>
+                <TimerReset size={isMobile ? 12 : 14} /> El código expira en 15 minutos.
               </small>
             </motion.form>
           )}
@@ -217,22 +300,44 @@ export default function Register() {
           {step === "done" && (
             <motion.div
               key="done"
-              style={{ textAlign: "center", paddingTop: 8, paddingBottom: 6 }}
+              style={{ 
+                textAlign: "center", 
+                paddingTop: isMobile ? 6 : 8, 
+                paddingBottom: isMobile ? 4 : 6 
+              }}
               initial={{ opacity: 0, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -8 }}
               transition={{ duration: 0.25 }}
             >
-              <CheckCircle2 size={42} color="var(--color-azul-turquesa)" />
-              <h3 style={{ marginBottom: 6 }}>¡Cuenta verificada!</h3>
-              <p style={{ marginTop: 0 }}>{msg}</p>
-              <small>Recargando en {countdown}…</small>
+              <CheckCircle2 size={isMobile ? 36 : 42} color="var(--color-azul-turquesa)" />
+              <h3 style={{ 
+                marginBottom: isMobile ? 4 : 6,
+                fontSize: isMobile ? "1.1rem" : "1.3rem",
+              }}>
+                ¡Cuenta verificada!
+              </h3>
+              <p style={{ 
+                marginTop: 0,
+                fontSize: isMobile ? "0.85rem" : "0.95rem",
+              }}>
+                {msg}
+              </p>
+              <small style={{ fontSize: isMobile ? "0.75rem" : "0.85rem" }}>
+                Recargando en {countdown}…
+              </small>
             </motion.div>
           )}
         </AnimatePresence>
 
         {msg && step !== "done" && (
-          <div style={{ marginTop: 12, fontSize: 13, opacity: 0.9 }}>{msg}</div>
+          <div style={{ 
+            marginTop: 12, 
+            fontSize: isMobile ? "0.8rem" : "0.85rem", 
+            opacity: 0.9 
+          }}>
+            {msg}
+          </div>
         )}
       </motion.div>
     </div>
@@ -241,20 +346,44 @@ export default function Register() {
 
 /* ---------- UI bits ---------- */
 
-function Field({ icon, ...rest }) {
+function Field({ icon, isMobile, ...rest }) {
   return (
-    <div style={fieldWrap}>
-      <div style={fieldIcon}>{icon}</div>
-      <input {...rest} style={inputBase} />
+    <div style={{
+      ...fieldWrap,
+    }}>
+      <div style={{
+        ...fieldIcon,
+        width: isMobile ? 24 : 28,
+        height: isMobile ? 24 : 28,
+      }}>
+        {icon}
+      </div>
+      <input {...rest} style={{
+        ...inputBase,
+        padding: isMobile ? "10px 12px 10px 40px" : "12px 12px 12px 48px",
+        fontSize: isMobile ? "0.9rem" : "0.95rem",
+      }} />
     </div>
   );
 }
 
-function PasswordHints({ ok }) {
+function PasswordHints({ ok, isMobile }) {
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: 8, fontSize: 12, marginTop: -4 }}>
+    <div style={{ 
+      display: "flex", 
+      alignItems: "center", 
+      gap: 8, 
+      fontSize: isMobile ? "0.75rem" : "0.85rem", 
+      marginTop: isMobile ? -2 : -4 
+    }}>
       <span style={{ opacity: 0.8 }}>Seguridad:</span>
-      <span style={{ padding: "2px 8px", borderRadius: 999, background: ok ? "#e8f7ee" : "#fbebeb", color: ok ? "#18794E" : "#B61E1E" }}>
+      <span style={{ 
+        padding: "2px 8px", 
+        borderRadius: 999, 
+        background: ok ? "#e8f7ee" : "#fbebeb", 
+        color: ok ? "#18794E" : "#B61E1E",
+        fontSize: isMobile ? "0.7rem" : "0.75rem",
+      }}>
         {ok ? "Fuerte" : "Débil"}
       </span>
     </div>
@@ -264,8 +393,6 @@ function PasswordHints({ ok }) {
 /* ---------- Styles ---------- */
 
 const wrap = {
-  minHeight: "60vh",
-  padding: "40px 20px",
   display: "grid",
   placeItems: "center",
   position: "relative",
@@ -298,46 +425,37 @@ const gradientBlob2 = {
 
 const card = {
   width: "100%",
-  maxWidth: 520,
   background: "rgba(255,255,255,.7)",
   backdropFilter: "blur(10px)",
   border: "1px solid rgba(0,0,0,.06)",
   borderRadius: 16,
-  padding: 18,
   boxShadow: "0 30px 80px rgba(0,0,0,.12)",
 };
 
 const brand = {
   display: "flex",
   alignItems: "center",
-  gap: 12,
 };
 
 const progressBar = {
   display: "flex",
   alignItems: "center",
-  gap: 10,
 };
 
 const progressDot = {
-  width: 12,
-  height: 12,
   borderRadius: 999,
   transition: "background .2s ease",
 };
 
 const progressConnector = {
   height: 2,
-  width: 40,
   borderRadius: 2,
-  background: "#e5e7eb",
+  transition: "background .2s ease",
 };
 
 const formCol = {
   display: "flex",
   flexDirection: "column",
-  gap: 12,
-  marginTop: 16,
 };
 
 const fieldWrap = {
@@ -351,8 +469,6 @@ const fieldIcon = {
   left: 10,
   display: "grid",
   placeItems: "center",
-  width: 28,
-  height: 28,
   borderRadius: 8,
   background: "linear-gradient(135deg, rgba(0,199,220,.18), rgba(255,199,0,.18))",
   border: "1px solid rgba(0,0,0,.06)",
@@ -360,7 +476,6 @@ const fieldIcon = {
 
 const inputBase = {
   width: "100%",
-  padding: "12px 12px 12px 48px",
   borderRadius: 12,
   border: "1px solid #e5e7eb",
   outline: "none",
@@ -371,10 +486,10 @@ const inputBase = {
 const btnPrimary = {
   border: "none",
   borderRadius: 12,
-  padding: "12px 14px",
   background: "linear-gradient(135deg, var(--color-azul-turquesa), #0ea5e9)",
   color: "#fff",
   cursor: "pointer",
+  width: "100%",
 };
 
 /* pequeñito spinner (usa className="spin") */

@@ -1,7 +1,18 @@
-// frontend/src/components/Footer.jsx
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 export default function Footer() {
+  const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [isTablet, setIsTablet] = useState(window.innerWidth <= 1024);
+
+  useEffect(() => {
+    const handleResize = () => {
+      setIsMobile(window.innerWidth <= 768);
+      setIsTablet(window.innerWidth <= 1024);
+    };
+    window.addEventListener("resize", handleResize);
+    return () => window.removeEventListener("resize", handleResize);
+  }, []);
+
   return (
     <footer style={{ marginTop: 56, position: "relative", overflow: "hidden" }}>
       {/* --- Wave divider (SVG) --- */}
@@ -19,17 +30,17 @@ export default function Footer() {
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "0 20px",
+          padding: isMobile ? "0 12px" : "0 20px",
           marginTop: -28,
         }}
       >
         <div
           style={{
             display: "grid",
-            gridTemplateColumns: "1fr auto",
-            gap: 16,
+            gridTemplateColumns: isMobile ? "1fr" : "1fr auto",
+            gap: isMobile ? 12 : 16,
             alignItems: "center",
-            padding: "16px 18px",
+            padding: isMobile ? "12px 14px" : "16px 18px",
             borderRadius: 14,
             background:
               "linear-gradient(135deg, rgba(37,99,235,0.10) 0%, rgba(16,185,129,0.10) 100%)",
@@ -38,12 +49,12 @@ export default function Footer() {
             backdropFilter: "blur(6px)",
           }}
         >
-          <div style={{ display: "flex", alignItems: "center", gap: 12 }}>
+          <div style={{ display: "flex", alignItems: "center", gap: isMobile ? 8 : 12 }}>
             <img
               src="/images/logo-optica.png"
               alt="Clínica El Áncora"
-              width="32"
-              height="32"
+              width={isMobile ? 28 : 32}
+              height={isMobile ? 28 : 32}
               style={{ borderRadius: 8, objectFit: "cover" }}
             />
             <div>
@@ -52,11 +63,12 @@ export default function Footer() {
                   fontWeight: 700,
                   letterSpacing: 0.2,
                   fontFamily: "var(--font-heading)",
+                  fontSize: isMobile ? "0.9rem" : "1rem",
                 }}
               >
                 ¿Necesitas una cita rápida?
               </div>
-              <small style={{ opacity: 0.8 }}>
+              <small style={{ opacity: 0.8, fontSize: isMobile ? "0.75rem" : "0.875rem" }}>
                 Agenda en segundos: te atenderemos con gusto.
               </small>
             </div>
@@ -70,13 +82,15 @@ export default function Footer() {
               display: "inline-flex",
               alignItems: "center",
               gap: 10,
-              padding: "10px 14px",
+              padding: isMobile ? "8px 12px" : "10px 14px",
               borderRadius: 999,
               color: "#fff",
               background:
                 "linear-gradient(135deg, #22c55e 0%, #16a34a 45%, #0ea5e9 100%)",
               boxShadow: "0 8px 18px rgba(34,197,94,0.35)",
               fontWeight: 700,
+              fontSize: isMobile ? "0.85rem" : "0.95rem",
+              whiteSpace: "nowrap",
             }}
             onMouseEnter={(e) =>
               (e.currentTarget.style.transform = "translateY(-1px)")
@@ -85,8 +99,9 @@ export default function Footer() {
               (e.currentTarget.style.transform = "translateY(0)")
             }
           >
-            <img src="/icons/whatsapp.svg" width="18" height="18" alt="" />
-            Agendar por WhatsApp
+            <img src="/icons/whatsapp.svg" width={isMobile ? 16 : 18} height={isMobile ? 16 : 18} alt="" />
+            {!isMobile && "Agendar por WhatsApp"}
+            {isMobile && "WhatsApp"}
           </a>
         </div>
       </div>
@@ -96,21 +111,21 @@ export default function Footer() {
         style={{
           maxWidth: 1200,
           margin: "22px auto 0",
-          padding: "0 20px 22px",
+          padding: isMobile ? "0 12px 22px" : "0 20px 22px",
           display: "grid",
-          gridTemplateColumns: "repeat(12, 1fr)",
-          gap: 20,
+          gridTemplateColumns: isMobile ? "1fr" : isTablet ? "repeat(2, 1fr)" : "repeat(12, 1fr)",
+          gap: isMobile ? 12 : 20,
         }}
       >
         {/* Col 1: Marca & About */}
         <div
           style={{
-            gridColumn: "span 4",
+            gridColumn: isMobile ? "span 1" : isTablet ? "span 1" : "span 4",
             minWidth: 280,
             background: "#fff",
             border: "1px solid rgba(0,0,0,0.06)",
             borderRadius: 16,
-            padding: 20,
+            padding: isMobile ? 16 : 20,
             boxShadow: "0 10px 24px rgba(0,0,0,0.06)",
           }}
         >
@@ -128,16 +143,17 @@ export default function Footer() {
                   fontFamily: "var(--font-heading)",
                   fontWeight: 800,
                   letterSpacing: 0.2,
+                  fontSize: isMobile ? "0.95rem" : "1rem",
                 }}
               >
                 Clínica El Áncora
               </div>
-              <small style={{ opacity: 0.75 }}>
-                Tecnología & cuidado visual especializado
+              <small style={{ opacity: 0.75, fontSize: isMobile ? "0.75rem" : "0.85rem" }}>
+                Tecnología & cuidado visual
               </small>
             </div>
           </div>
-          <p style={{ marginTop: 12, opacity: 0.9 }}>
+          <p style={{ marginTop: 12, opacity: 0.9, fontSize: isMobile ? "0.85rem" : "0.95rem" }}>
             Exámenes de la vista, tratamientos y lentes hechos a tu medida. Un
             servicio humano apoyado por herramientas digitales.
           </p>
@@ -155,27 +171,43 @@ export default function Footer() {
           </div>
         </div>
 
-        {/* Col 2: Dirección (solo dirección, sin horario ni cómo llegar) */}
-        <FooterCard title="Dirección" colSpan={4}>
+        {/* Col 2: Dirección */}
+        <FooterCard 
+          title="Dirección" 
+          colSpan={isMobile ? 1 : isTablet ? 1 : 4}
+          isMobile={isMobile}
+        >
           <Row
             icon="/icons/map-pin.svg"
             label="11 Calle 5-75, Zona 1"
             sub="Ciudad de Guatemala"
+            isMobile={isMobile}
           />
         </FooterCard>
 
-        {/* Col 3: Contacto (incluye el correo solicitado también) */}
-        <FooterCard title="Contacto" colSpan={4}>
+        {/* Col 3: Contacto */}
+        <FooterCard 
+          title="Contacto" 
+          colSpan={isMobile ? 1 : isTablet ? 1 : 4}
+          isMobile={isMobile}
+        >
           <Row
             icon="/icons/whatsapp.svg"
             label="+502 4144-5224"
             link="https://wa.me/50241445224"
+            isMobile={isMobile}
           />
-          <Row icon="/icons/phone.svg" label="+502 2232-2721" link="tel:+50222322721" />
+          <Row 
+            icon="/icons/phone.svg" 
+            label="+502 2232-2721" 
+            link="tel:+50222322721"
+            isMobile={isMobile}
+          />
           <Row
             icon="/icons/mail.svg"
             label="clinicaelancora@gmail.com"
             link="mailto:clinicaelancora@gmail.com"
+            isMobile={isMobile}
           />
         </FooterCard>
       </div>
@@ -191,12 +223,12 @@ export default function Footer() {
         }}
       />
 
-      {/* Bottom bar (sin privacidad/términos/cookies) */}
+      {/* Bottom bar */}
       <div
         style={{
           maxWidth: 1200,
           margin: "0 auto",
-          padding: "12px 20px 20px",
+          padding: isMobile ? "12px 12px 16px" : "12px 20px 20px",
           display: "flex",
           alignItems: "center",
           justifyContent: "center",
@@ -211,7 +243,7 @@ export default function Footer() {
           height="18"
           style={{ borderRadius: 4, objectFit: "cover", opacity: 0.9 }}
         />
-        <small style={{ opacity: 0.75 }}>
+        <small style={{ opacity: 0.75, fontSize: isMobile ? "0.75rem" : "0.85rem" }}>
           © {new Date().getFullYear()} Clínica El Áncora. Todos los derechos
           reservados.
         </small>
@@ -222,7 +254,7 @@ export default function Footer() {
 
 /* ---------- Helpers ---------- */
 
-function FooterCard({ title, children, colSpan = 4 }) {
+function FooterCard({ title, children, colSpan = 4, isMobile }) {
   return (
     <div
       style={{
@@ -231,7 +263,7 @@ function FooterCard({ title, children, colSpan = 4 }) {
         background: "#fff",
         border: "1px solid rgba(0,0,0,0.06)",
         borderRadius: 16,
-        padding: 20,
+        padding: isMobile ? 16 : 20,
         boxShadow: "0 10px 24px rgba(0,0,0,0.06)",
       }}
     >
@@ -241,6 +273,7 @@ function FooterCard({ title, children, colSpan = 4 }) {
           letterSpacing: 0.3,
           marginBottom: 10,
           fontFamily: "var(--font-heading)",
+          fontSize: isMobile ? "0.95rem" : "1rem",
         }}
       >
         {title}
@@ -250,7 +283,7 @@ function FooterCard({ title, children, colSpan = 4 }) {
   );
 }
 
-function Row({ icon, label, sub, link }) {
+function Row({ icon, label, sub, link, isMobile }) {
   const content = (
     <div
       style={{
@@ -258,7 +291,7 @@ function Row({ icon, label, sub, link }) {
         gridTemplateColumns: "28px 1fr",
         alignItems: "center",
         gap: 10,
-        padding: "10px 12px",
+        padding: isMobile ? "8px 10px" : "10px 12px",
         borderRadius: 12,
         border: "1px solid rgba(0,0,0,0.06)",
         background: "linear-gradient(180deg,#fff,rgba(250,250,250,0.6))",
@@ -276,8 +309,10 @@ function Row({ icon, label, sub, link }) {
     >
       <img src={icon} width="22" height="22" alt="" style={{ opacity: 0.9 }} />
       <div>
-        <div style={{ fontWeight: 600 }}>{label}</div>
-        {sub && <small style={{ opacity: 0.75 }}>{sub}</small>}
+        <div style={{ fontWeight: 600, fontSize: isMobile ? "0.85rem" : "0.95rem" }}>
+          {label}
+        </div>
+        {sub && <small style={{ opacity: 0.75, fontSize: isMobile ? "0.7rem" : "0.8rem" }}>{sub}</small>}
       </div>
     </div>
   );
