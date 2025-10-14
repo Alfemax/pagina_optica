@@ -1,7 +1,7 @@
-// frontend/src/services/optoApi.js
 import { apiAuth } from './apiAuth';
 
-const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:4000/api';
+// usamos el mismo base que en apiAuth
+const API_BASE = (import.meta.env.VITE_API_URL ?? 'http://localhost:4000').replace(/\/+$/, '');
 
 export const optoApi = {
   // ===== AGENDA =====
@@ -19,27 +19,24 @@ export const optoApi = {
   pacientesList: (q) => apiAuth.get('/opto/pacientes', { params: { q } }),
   pacienteGet: (id) => apiAuth.get(`/opto/pacientes/${id}`),
   pacienteCreate: (payload) => apiAuth.post('/opto/pacientes', payload),
-  pacienteUpdate: (id, payload) =>
-    apiAuth.put(`/opto/pacientes/${id}`, payload),
+  pacienteUpdate: (id, payload) => apiAuth.put(`/opto/pacientes/${id}`, payload),
   pacienteDelete: (id) => apiAuth.delete(`/opto/pacientes/${id}`),
 
   // ===== USUARIOS CANDIDATOS =====
-  userCandidates: (q) =>
-    apiAuth.get('/opto/users-candidates', { params: { q } }),
+  userCandidates: (q) => apiAuth.get('/opto/users-candidates', { params: { q } }),
 
   // ===== FICHAS MÉDICAS =====
-  fichasList:   (params)      => apiAuth.get('/opto/fichas', { params }),
-  fichaGet:     (id)          => apiAuth.get(`/opto/fichas/${id}`),
-  fichaCreate:  (payload)     => apiAuth.post('/opto/fichas', payload),
-  fichaUpdate:  (id, payload) => apiAuth.put(`/opto/fichas/${id}`, payload),
-  fichaToggle:  (id, activo)  => apiAuth.patch(`/opto/fichas/${id}/activo`, { activo }),
-  fichaPdfBlob: (id)          => apiAuth.get(`/opto/fichas/${id}/pdf`, { responseType: 'blob' }),
+  fichasList: (params) => apiAuth.get('/opto/fichas', { params }),
+  fichaGet: (id) => apiAuth.get(`/opto/fichas/${id}`),
+  fichaCreate: (payload) => apiAuth.post('/opto/fichas', payload),
+  fichaUpdate: (id, payload) => apiAuth.put(`/opto/fichas/${id}`, payload),
+  fichaToggle: (id, activo) => apiAuth.patch(`/opto/fichas/${id}/activo`, { activo }),
+  fichaPdfBlob: (id) => apiAuth.get(`/opto/fichas/${id}/pdf`, { responseType: 'blob' }),
 
   // ===== RECETAS =====
-  crearReceta:   (payload) => apiAuth.post('/opto/recetas', payload),
-  recetaPdfUrl: (id) => `${baseURL}/opto/recetas/${id}/pdf`,
-  
-  // ===== ANALYTICS / MINI CRM =====
-analytics: (params) => apiAuth.get('/opto/analytics', { params }),
+  crearReceta: (payload) => apiAuth.post('/opto/recetas', payload),
+  recetaPdfUrl: (id) => `${API_BASE}/api/opto/recetas/${id}/pdf`,
 
+  // ===== ANALYTICS / MINI CRM =====
+  analytics: (params) => apiAuth.get('/opto/analytics', { params }),
 };

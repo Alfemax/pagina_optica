@@ -13,11 +13,10 @@ import rolesRoutes from './routes/roles.routes.js';
 import securityRoutes from './routes/security.routes.js';
 import profileRoutes from './routes/profile.routes.js';
 import pacienteCitasRouter from './routes/paciente.citas.routes.js';
+import settingsRoutes from './routes/settings.routes.js';
 
 import path from 'path';
 import { fileURLToPath } from 'url';
-import settingsRoutes from './routes/settings.routes.js';
-
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
 // --- Configuración de Express ---
@@ -28,16 +27,10 @@ app.use(express.json());
 app.use(morgan('dev'));
 
 // --- SMTP check ---
-import { transporter } from './utils/mailer.js';
-transporter.verify((err, success) => {
-  if (err) {
-    console.error('❌ SMTP error:', err);
-  } else {
-    console.log('✅ SMTP listo para enviar correos');
-  }
-});
+import { verifySmtp } from './utils/mailer.js';
+verifySmtp();
 
-// --- Rutas ---
+// --- Rutas principales ---
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 app.use('/api/opto', optoRoutes);
@@ -47,6 +40,8 @@ app.use('/api/admin/settings', settingsRoutes);
 app.use('/api', profileRoutes);
 app.use('/api/paciente', pacienteCitasRouter);
 
+// --- Healthchecks ---
+app.get('/healthz', (_req, res) => res.status(200).send('ok'));
 app.get('/api/health', (_req, res) => {
   res.json({ ok: true, ts: Date.now() });
 });
