@@ -43,6 +43,10 @@ export default function Navbar() {
     navigate('/');
   };
 
+  const handleNavClick = () => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   const linkStyle = ({ isActive }) => ({
     position: 'relative',
     textDecoration: 'none',
@@ -50,35 +54,35 @@ export default function Navbar() {
     padding: '6px 2px',
     fontFamily: 'var(--font-subtitle)',
     opacity: isActive ? 1 : 0.9,
-    fontSize: isMobile ? '0.85rem' : '0.95rem',
+    fontSize: isMobile ? '0.75rem' : '0.9rem',
   });
 
   return (
     <header style={{
       ...wrap,
-      padding: isMobile ? '10px 16px' : '12px 20px',
+      padding: isMobile ? '8px 12px' : '12px 20px',
     }}>
       <nav style={{
         ...bar,
-        padding: isMobile ? '10px 0' : '12px 20px',
-        gap: isMobile ? 8 : 16,
+        padding: isMobile ? '8px 0' : '12px 20px',
+        gap: isMobile ? 6 : 16,
         flexWrap: isMobile ? 'wrap' : 'nowrap',
       }}>
-        <Link to="/" style={{
+        <Link to="/" onClick={handleNavClick} style={{
           ...brand,
-          gap: isMobile ? 8 : 12,
+          gap: isMobile ? 6 : 12,
           flex: isMobile ? '1' : 'none',
         }}>
           <span style={{
             ...logoWrap,
-            width: isMobile ? 32 : 36,
-            height: isMobile ? 32 : 36,
+            width: isMobile ? 28 : 36,
+            height: isMobile ? 28 : 36,
           }}>
             <img
               src="/images/logo-optica.png"
               alt="Clínica El Áncora"
-              width={isMobile ? 32 : 36}
-              height={isMobile ? 32 : 36}
+              width={isMobile ? 28 : 36}
+              height={isMobile ? 28 : 36}
               style={logoImg}
             />
             <span style={glow} aria-hidden />
@@ -93,24 +97,24 @@ export default function Navbar() {
                 width: '100%',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(3, 1fr)',
-                gap: 8,
-                marginTop: 8,
+                gap: 4,
+                marginTop: 6,
               }}>
-                <NavItem to="/" styleFn={linkStyle} isMobile={isMobile}>Inicio</NavItem>
-                <NavItem to="/servicios" styleFn={linkStyle} isMobile={isMobile}>Servicios</NavItem>
-                <NavItem to="/quienes-somos" styleFn={linkStyle} isMobile={isMobile}>¿Quiénes?</NavItem>
-                <NavItem to="/citas" styleFn={linkStyle} isMobile={isMobile}>Agendar</NavItem>
-                <NavItem to="/login" styleFn={linkStyle} isMobile={isMobile}>Sesión</NavItem>
-                <NavItem to="/registro" styleFn={linkStyle} accent isMobile={isMobile}>¡Regístrate!</NavItem>
+                <NavItem to="/" styleFn={linkStyle} onClick={handleNavClick}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} onClick={handleNavClick}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} onClick={handleNavClick}>Nosotros</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} onClick={handleNavClick}>Agendar</NavItem>
+                <NavItem to="/login" styleFn={linkStyle} onClick={handleNavClick}>Entrar</NavItem>
+                <NavItem to="/registro" styleFn={linkStyle} accent onClick={handleNavClick}>Registro</NavItem>
               </div>
             ) : (
               <div style={linksWrap}>
-                <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
-                <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
-                <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
-                <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
-                <NavItem to="/login" styleFn={linkStyle}>Iniciar Sesión</NavItem>
-                <NavItem to="/registro" styleFn={linkStyle} accent>¡Regístrate!</NavItem>
+                <NavItem to="/" styleFn={linkStyle} onClick={handleNavClick}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} onClick={handleNavClick}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} onClick={handleNavClick}>¿Quiénes somos?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} onClick={handleNavClick}>Agendar Cita</NavItem>
+                <NavItem to="/login" styleFn={linkStyle} onClick={handleNavClick}>Iniciar Sesión</NavItem>
+                <NavItem to="/registro" styleFn={linkStyle} accent onClick={handleNavClick}>¡Regístrate!</NavItem>
               </div>
             )}
           </>
@@ -121,20 +125,20 @@ export default function Navbar() {
                 width: '100%',
                 display: 'grid',
                 gridTemplateColumns: 'repeat(2, 1fr)',
-                gap: 8,
-                marginTop: 8,
+                gap: 6,
+                marginTop: 6,
               }}>
-                <NavItem to="/" styleFn={linkStyle} isMobile={isMobile}>Inicio</NavItem>
-                <NavItem to="/servicios" styleFn={linkStyle} isMobile={isMobile}>Servicios</NavItem>
-                <NavItem to="/quienes-somos" styleFn={linkStyle} isMobile={isMobile}>¿Quiénes?</NavItem>
-                <NavItem to="/citas" styleFn={linkStyle} isMobile={isMobile}>Agendar</NavItem>
+                <NavItem to="/" styleFn={linkStyle} onClick={handleNavClick}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} onClick={handleNavClick}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} onClick={handleNavClick}>¿Quiénes?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} onClick={handleNavClick}>Agendar</NavItem>
               </div>
             ) : (
               <div style={authWrap}>
-                <NavItem to="/" styleFn={linkStyle}>Inicio</NavItem>
-                <NavItem to="/servicios" styleFn={linkStyle}>Servicios</NavItem>
-                <NavItem to="/quienes-somos" styleFn={linkStyle}>¿Quiénes somos?</NavItem>
-                <NavItem to="/citas" styleFn={linkStyle}>Agendar Cita</NavItem>
+                <NavItem to="/" styleFn={linkStyle} onClick={handleNavClick}>Inicio</NavItem>
+                <NavItem to="/servicios" styleFn={linkStyle} onClick={handleNavClick}>Servicios</NavItem>
+                <NavItem to="/quienes-somos" styleFn={linkStyle} onClick={handleNavClick}>¿Quiénes somos?</NavItem>
+                <NavItem to="/citas" styleFn={linkStyle} onClick={handleNavClick}>Agendar Cita</NavItem>
               </div>
             )}
 
@@ -145,17 +149,18 @@ export default function Navbar() {
                 className="btn"
                 style={{
                   ...userBtn,
-                  padding: isMobile ? '6px 10px' : '8px 12px',
-                  fontSize: isMobile ? '0.8rem' : '0.95rem',
-                  gap: isMobile ? 6 : 10,
+                  padding: isMobile ? '5px 8px' : '8px 12px',
+                  fontSize: isMobile ? '0.7rem' : '0.9rem',
+                  gap: isMobile ? 4 : 10,
                 }}
                 aria-haspopup="menu"
                 aria-expanded={open}
               >
                 <span style={{
                   ...avatar,
-                  width: isMobile ? 22 : 26,
-                  height: isMobile ? 22 : 26,
+                  width: isMobile ? 20 : 26,
+                  height: isMobile ? 20 : 26,
+                  fontSize: isMobile ? '0.7rem' : '0.9rem',
                 }} aria-hidden>{(usuario || 'U')[0].toUpperCase()}</span>
                 {!isMobile && <span style={{ whiteSpace:'nowrap' }}>Hola, {usuario}</span>}
                 {isMobile && <span style={{ whiteSpace:'nowrap' }}>Menú</span>}
@@ -168,38 +173,38 @@ export default function Navbar() {
                   role="menu"
                   style={{
                     ...menu,
-                    minWidth: isMobile ? '200px' : '220px',
+                    minWidth: isMobile ? '180px' : '220px',
                     right: isMobile ? '-8px' : 0,
                   }}
                 >
                   {rol === 1 && (
-                    <Link to="/admin" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
+                    <Link to="/admin" onClick={()=>{setOpen(false); handleNavClick();}} style={{...item, fontSize: isMobile ? '0.8rem' : '0.9rem'}} role="menuitem">
                       <span>Dashboard Admin</span>
                     </Link>
                   )}
                   {rol === 2 && (
-                    <Link to="/optometrista" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
+                    <Link to="/optometrista" onClick={()=>{setOpen(false); handleNavClick();}} style={{...item, fontSize: isMobile ? '0.8rem' : '0.9rem'}} role="menuitem">
                       <span>Dashboard Optometrista</span>
                     </Link>
                   )}
 
-                  <Link to="/perfil" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
+                  <Link to="/perfil" onClick={()=>{setOpen(false); handleNavClick();}} style={{...item, fontSize: isMobile ? '0.8rem' : '0.9rem'}} role="menuitem">
                     Configurar perfil
                   </Link>
 
                   {rol === 3 ? (
-                    <Link to="/paciente" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
+                    <Link to="/paciente" onClick={()=>{setOpen(false); handleNavClick();}} style={{...item, fontSize: isMobile ? '0.8rem' : '0.9rem'}} role="menuitem">
                       Mis citas
                     </Link>
                   ) : (
-                    <Link to="/citas" onClick={()=>setOpen(false)} style={{...item, fontSize: isMobile ? '0.85rem' : '0.95rem'}} role="menuitem">
+                    <Link to="/citas" onClick={()=>{setOpen(false); handleNavClick();}} style={{...item, fontSize: isMobile ? '0.8rem' : '0.9rem'}} role="menuitem">
                       Ver citas
                     </Link>
                   )}
 
                   <button
                     onClick={handleLogout}
-                    style={{ ...item, width:'100%', textAlign:'left', background:'transparent', border:'none', fontSize: isMobile ? '0.85rem' : '0.95rem' }}
+                    style={{ ...item, width:'100%', textAlign:'left', background:'transparent', border:'none', fontSize: isMobile ? '0.8rem' : '0.9rem' }}
                     role="menuitem"
                   >
                     Cerrar sesión
@@ -216,9 +221,9 @@ export default function Navbar() {
   );
 }
 
-function NavItem({ to, children, styleFn, accent, isMobile }) {
+function NavItem({ to, children, styleFn, accent, onClick }) {
   return (
-    <NavLink to={to} style={styleFn} className={accent ? 'nav-accent' : 'nav-link'}>
+    <NavLink to={to} style={styleFn} className={accent ? 'nav-accent' : 'nav-link'} onClick={onClick}>
       <span className="nav-underline">{children}</span>
     </NavLink>
   );
@@ -256,7 +261,7 @@ const userBtn = {
   cursor: 'pointer', transition: 'transform .15s ease', willChange: 'transform'
 };
 const avatar = { borderRadius: 999, display: 'grid', placeItems: 'center', background: 'rgba(255,255,255,.2)', fontWeight: 700 };
-const caret = (open) => ({ marginLeft: 2, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .18s ease' });
+const caret = (open) => ({ marginLeft: 2, transform: open ? 'rotate(180deg)' : 'none', transition: 'transform .18s ease', fontSize: '0.8rem' });
 const menu = {
   position: 'absolute', marginTop: 10, background: '#fff',
   border: '1px solid rgba(0,0,0,0.06)', borderRadius: 14,
@@ -285,10 +290,10 @@ const css = `
     width: 100%;
   }
   .nav-accent {
-    padding: 6px 10px !important;
-    border-radius: 12px;
+    padding: 4px 8px !important;
+    border-radius: 10px;
     background: linear-gradient(135deg, #fde047 0%, #fbbf24 100%);
-    box-shadow: 0 10px 18px rgba(251,191,36,.25);
+    box-shadow: 0 8px 14px rgba(251,191,36,.25);
   }
   .nav-accent:hover { transform: translateY(-1px); }
   .btn:focus, a:focus, button:focus {
