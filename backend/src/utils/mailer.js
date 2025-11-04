@@ -1,53 +1,81 @@
-import nodemailer from 'nodemailer';
+/* ------------------- Brevo API ------------------- */
+async function sendViaBrevo({ to, subject, html, attachments = [] }) {
+  if (!process.env.BREVO_API_KEY) {
+    throw new Error('BREVO_API_KEY no configurada');
+  }
 
-/* ------------------- Transporter SMTP ------------------- */
-const port = Number(process.env.SMTP_PORT || 587);
-const secure = port === 465; // true = SSL, false = STARTTLS
+  const url = 'https://api.brevo.com/v3/smtp/email';
 
-export const transporter = nodemailer.createTransport({
-  host: process.env.SMTP_HOST || 'smtp.gmail.com',
-  port,
-  secure,
-  auth: {
-    user: process.env.SMTP_USER,
-    pass: process.env.SMTP_PASS, // App Password de Gmail
-  },
-  connectionTimeout: 10000, // 10s
-  greetingTimeout: 10000,
-  socketTimeout: 20000,
-  tls: { rejectUnauthorized: true },
-});
+  // Mapear attachments a formato Brevo
+  const mappedAttachments = (attachments || []).map((a) => {
+    let contentBase64 = '';
+    if (a?.content) {
+      contentBase64 = Buffer.isBuffer(a.content)
+        ? a.content.toString('base64')
+        : Buffer.from(String(a.content)).toString('base64');
+    }
+    return { 
+      name: a?.filename || a?.name || 'adjunto', 
+      content: contentBase64 
+    };
+  });
 
-const FROM =
-  process.env.SMTP_FROM ||
-  `"Clínica El Áncora" <${process.env.SMTP_USER}>`;
+  const FROM = process.env.SMTP_FROM || '"Clínica El Áncora" <clinicaelancora@gmail.com>';
+  const senderName = (FROM.split('<')[0] || '').replace(/"/g, '').trim() || 'Clínica El Áncora';
+  const senderEmail = (FROM.match(/<(.+?)>/) || [])[1] || FROM;
 
-/* ------------------- Verificación segura ------------------- */
+  const body = {
+    sender: { name: senderName, email: senderEmail },
+    to: [{ email: to }],
+    subject,
+    htmlContent: html,
+    ...(mappedAttachments.length > 0 && { attachment: mappedAttachments }),
+  };
+
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'api-key': process.env.BREVO_API_KEY,
+      'content-type': 'application/json',
+      accept: 'application/json',
+    },
+    body: JSON.stringify(body),
+  });
+
+  const responseText = await res.text().catch(() => '');
+
+  if (!res.ok) {
+    if (res.status === 401) {
+      throw new Error('BREVO_API_KEY inválida o expirada');
+    }
+    if (res.status === 400 && responseText.includes('sender')) {
+      throw new Error(`Email sender '${senderEmail}' no verificado en Brevo`);
+    }
+    throw new Error(`Brevo ${res.status}: ${responseText}`);
+  }
+
+  const data = JSON.parse(responseText);
+  console.log('📧 Enviado:', data.messageId);
+  return data.messageId;
+}
+
+/* ------------------- Verificación ------------------- */
 export async function verifySmtp() {
   try {
-    if (process.env.NODE_ENV !== 'production') {
-      await transporter.verify();
-      console.log('✅ SMTP verificado correctamente');
-    } else {
-      console.log('ℹ️ SMTP verify omitido en producción');
+    if (!process.env.BREVO_API_KEY) {
+      console.log('⚠️ BREVO_API_KEY no configurada');
+      return;
     }
+    console.log('✅ Brevo API configurada correctamente');
   } catch (e) {
-    console.log('⚠️ SMTP no verificado:', e.message);
+    console.log('⚠️ Error con Brevo API:', e.message);
   }
 }
 
 /* ------------------- Envío general ------------------- */
 export async function sendMail({ to, subject, html, attachments = [] }) {
   if (!to) return;
-  const info = await transporter.sendMail({
-    from: FROM,
-    to,
-    subject,
-    html,
-    attachments,
-  });
-  console.log('📧 Enviado:', info.messageId);
-  return info.messageId;
+  return await sendViaBrevo({ to, subject, html, attachments });
 }
 
 /* ------------------- Plantilla base ------------------- */
