@@ -1,7 +1,7 @@
 import { Router } from 'express';
 import { pool } from '../db.js';
 import { requireAuth, requireRole } from '../middlewares/auth.js';
-import { transporter } from '../utils/mailer.js';
+import { sendMail } from '../utils/mailer.js';
 
 const r = Router();
 r.use(requireAuth, requireRole(1)); // solo admin
@@ -64,11 +64,10 @@ r.put('/', async (req, res) => {
 r.post('/test-smtp', async (req, res) => {
   try {
     const { to } = req.body;
-    await transporter.sendMail({
+    await sendMail({
       to,
-      from: process.env.MAIL_FROM,
       subject: 'Prueba de SMTP - Clínica El Áncora',
-      text: 'Este es un correo de prueba del módulo de seguridad.',
+      html: '<p>Este es un correo de prueba del módulo de seguridad.</p>',
     });
     res.json({ ok: true, message: 'Correo de prueba enviado' });
   } catch (e) {
