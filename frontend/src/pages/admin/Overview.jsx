@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { adminApi } from '../../services/adminApi';
+import { Users, Shield, Stethoscope, Hospital, TrendingUp, Zap, Lock, Calendar } from 'lucide-react';
 
 export default function Overview() {
   const [kpi, setKpi] = useState(null);
@@ -10,6 +11,11 @@ export default function Overview() {
   
   if (!kpi) return (
     <div style={loadingContainer}>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
       <div style={spinner}></div>
       <p style={loadingText}>Cargando datos...</p>
     </div>
@@ -19,88 +25,191 @@ export default function Overview() {
     { 
       title: 'Usuarios Totales', 
       value: kpi.total_usuarios, 
-      icon: '👥',
+      Icon: Users,
       color: '#0ea5e9',
-      bg: '#f0f9ff'
+      gradient: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+      bg: 'rgba(14, 165, 233, 0.1)'
     },
     { 
       title: 'Administradores', 
       value: kpi.total_admins, 
-      icon: '👨‍💼',
+      Icon: Shield,
       color: '#8b5cf6',
-      bg: '#f5f3ff'
+      gradient: 'linear-gradient(135deg, #8b5cf6 0%, #7c3aed 100%)',
+      bg: 'rgba(139, 92, 246, 0.1)'
     },
     { 
       title: 'Optometristas', 
       value: kpi.total_optos, 
-      icon: '👨‍⚕️',
+      Icon: Stethoscope,
       color: '#06b6d4',
-      bg: '#ecfeff'
+      gradient: 'linear-gradient(135deg, #06b6d4 0%, #0891b2 100%)',
+      bg: 'rgba(6, 182, 212, 0.1)'
     },
     { 
       title: 'Pacientes', 
       value: kpi.total_pac, 
-      icon: '🏥',
+      Icon: Hospital,
       color: '#10b981',
-      bg: '#f0fdf4'
+      gradient: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+      bg: 'rgba(16, 185, 129, 0.1)'
     },
   ];
 
   return (
-    <div>
+    <div style={container}>
+      <style>{`
+        @keyframes spin {
+          to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
+        }
+      `}</style>
+
       <header style={headerStyle}>
         <div>
           <h2 style={mainTitle}>Panel de Control</h2>
           <p style={subtitle}>Resumen general del sistema</p>
         </div>
         <div style={dateBox}>
-          <span style={dateIcon}>📅</span>
-          <span style={dateText}>{new Date().toLocaleDateString('es-GT', { 
-            weekday: 'long', 
-            year: 'numeric', 
-            month: 'long', 
-            day: 'numeric' 
-          })}</span>
+          <Calendar size={18} style={{ color: 'rgba(255, 255, 255, 0.6)' }} />
+          <span style={dateText}>
+            {new Date().toLocaleDateString('es-GT', { 
+              weekday: 'long', 
+              year: 'numeric', 
+              month: 'long', 
+              day: 'numeric' 
+            })}
+          </span>
         </div>
       </header>
 
       <div style={grid}>
-        {cards.map((card, idx) => (
-          <div key={idx} style={{...cardStyle, borderLeft: `4px solid ${card.color}`}}>
-            <div style={cardHeader}>
-              <div style={{...iconBox, background: card.bg, color: card.color}}>
-                {card.icon}
+        {cards.map((card, idx) => {
+          const Icon = card.Icon;
+          return (
+            <div 
+              key={idx} 
+              style={{
+                ...cardStyle,
+                animation: `fadeIn 0.4s ease ${idx * 0.1}s backwards`,
+              }}
+              onMouseEnter={e => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = `0 12px 32px ${card.color}30`;
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+              }}
+            >
+              <div style={cardHeader}>
+                <div style={{
+                  ...iconBox, 
+                  background: card.gradient,
+                  boxShadow: `0 8px 20px ${card.color}40`,
+                }}>
+                  <Icon size={24} style={{ color: '#fff' }} />
+                </div>
+                <span style={cardTitle}>{card.title}</span>
               </div>
-              <span style={cardTitle}>{card.title}</span>
+              <div style={cardValue}>{card.value.toLocaleString()}</div>
+              <div style={cardFooter}>
+                <div style={{
+                  ...badge,
+                  background: card.bg,
+                  color: card.color,
+                }}>
+                  Activo
+                </div>
+              </div>
+              <div style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                width: 3,
+                height: '100%',
+                background: card.gradient,
+                borderTopLeftRadius: 2,
+                borderBottomLeftRadius: 2,
+              }} />
             </div>
-            <div style={cardValue}>{card.value}</div>
-            <div style={cardFooter}>
-              <span style={badge}>Activo</span>
-            </div>
-          </div>
-        ))}
+          );
+        })}
       </div>
 
       {/* Quick Stats */}
       <div style={statsSection}>
         <h3 style={sectionTitle}>Estadísticas Rápidas</h3>
         <div style={statsGrid}>
-          <div style={statCard}>
-            <div style={statIcon}>📈</div>
+          <div 
+            style={statCard}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'rgba(14, 165, 233, 0.3)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            }}
+          >
+            <div style={{
+              ...statIcon, 
+              background: 'linear-gradient(135deg, #0ea5e9 0%, #06b6d4 100%)',
+              boxShadow: '0 8px 20px rgba(14, 165, 233, 0.3)',
+            }}>
+              <TrendingUp size={28} style={{ color: '#fff' }} />
+            </div>
             <div style={statInfo}>
               <div style={statLabel}>Tasa de actividad</div>
               <div style={statValue}>98.5%</div>
             </div>
           </div>
-          <div style={statCard}>
-            <div style={statIcon}>⚡</div>
+
+          <div 
+            style={statCard}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.3)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            }}
+          >
+            <div style={{
+              ...statIcon, 
+              background: 'linear-gradient(135deg, #f59e0b 0%, #d97706 100%)',
+              boxShadow: '0 8px 20px rgba(245, 158, 11, 0.3)',
+            }}>
+              <Zap size={28} style={{ color: '#fff' }} />
+            </div>
             <div style={statInfo}>
               <div style={statLabel}>Rendimiento</div>
               <div style={statValue}>Óptimo</div>
             </div>
           </div>
-          <div style={statCard}>
-            <div style={statIcon}>🔒</div>
+
+          <div 
+            style={statCard}
+            onMouseEnter={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
+            }}
+            onMouseLeave={e => {
+              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
+              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+            }}
+          >
+            <div style={{
+              ...statIcon, 
+              background: 'linear-gradient(135deg, #10b981 0%, #059669 100%)',
+              boxShadow: '0 8px 20px rgba(16, 185, 129, 0.3)',
+            }}>
+              <Lock size={28} style={{ color: '#fff' }} />
+            </div>
             <div style={statInfo}>
               <div style={statLabel}>Seguridad</div>
               <div style={statValue}>Alta</div>
@@ -113,6 +222,13 @@ export default function Overview() {
 }
 
 // Styles
+const container = {
+  background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)',
+  minHeight: '100vh',
+  padding: '32px',
+  color: '#ffffff',
+};
+
 const loadingContainer = {
   display: 'flex',
   flexDirection: 'column',
@@ -125,16 +241,18 @@ const loadingContainer = {
 const spinner = {
   width: 48,
   height: 48,
-  border: '4px solid #e5e7eb',
-  borderTop: '4px solid #0ea5e9',
+  border: '4px solid rgba(255, 255, 255, 0.1)',
+  borderTop: '4px solid #0066cc',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
 };
 
 const loadingText = {
-  color: '#64748b',
-  fontSize: 14,
+  color: 'rgba(255, 255, 255, 0.6)',
+  fontSize: '0.9rem',
   margin: 0,
+  fontWeight: 300,
+  letterSpacing: '0.3px',
 };
 
 const headerStyle = {
@@ -143,104 +261,106 @@ const headerStyle = {
   alignItems: 'flex-start',
   marginBottom: 32,
   paddingBottom: 24,
-  borderBottom: '1px solid #e5e7eb',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+  flexWrap: 'wrap',
+  gap: 16,
 };
 
 const mainTitle = {
   margin: 0,
-  fontSize: 32,
-  fontWeight: 700,
-  color: '#0f172a',
-  fontFamily: 'var(--font-heading)',
+  fontSize: '1.75rem',
+  fontWeight: 300,
+  color: '#ffffff',
+  letterSpacing: '0.5px',
 };
 
 const subtitle = {
   margin: '8px 0 0 0',
-  fontSize: 15,
-  color: '#64748b',
+  fontSize: '0.85rem',
+  color: 'rgba(255, 255, 255, 0.5)',
+  fontWeight: 300,
 };
 
 const dateBox = {
   display: 'flex',
   alignItems: 'center',
-  gap: 8,
+  gap: 10,
   padding: '10px 16px',
-  background: '#f8fafc',
-  borderRadius: 12,
-  border: '1px solid #e5e7eb',
-};
-
-const dateIcon = {
-  fontSize: 18,
+  background: 'rgba(255, 255, 255, 0.03)',
+  borderRadius: 2,
+  border: '1px solid rgba(255, 255, 255, 0.08)',
 };
 
 const dateText = {
-  fontSize: 13,
-  color: '#475569',
-  fontWeight: 500,
+  fontSize: '0.8rem',
+  color: 'rgba(255, 255, 255, 0.7)',
+  fontWeight: 400,
   textTransform: 'capitalize',
 };
 
 const grid = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
   gap: 20,
   marginBottom: 32,
 };
 
 const cardStyle = {
-  background: '#fff',
-  borderRadius: 16,
+  position: 'relative',
+  background: 'rgba(255, 255, 255, 0.02)',
+  borderRadius: 2,
   padding: 24,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
-  border: '1px solid #e5e7eb',
-  transition: 'all 0.3s ease',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   cursor: 'pointer',
+  overflow: 'hidden',
 };
 
 const cardHeader = {
   display: 'flex',
   alignItems: 'center',
-  gap: 12,
-  marginBottom: 16,
+  gap: 14,
+  marginBottom: 20,
 };
 
 const iconBox = {
-  width: 48,
-  height: 48,
-  borderRadius: 12,
+  width: 56,
+  height: 56,
+  borderRadius: 2,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontSize: 24,
+  transition: 'transform 0.3s ease',
 };
 
 const cardTitle = {
-  fontSize: 14,
-  color: '#64748b',
+  fontSize: '0.8rem',
+  color: 'rgba(255, 255, 255, 0.6)',
   fontWeight: 500,
+  letterSpacing: '0.5px',
+  textTransform: 'uppercase',
 };
 
 const cardValue = {
-  fontSize: 36,
-  fontWeight: 700,
-  color: '#0f172a',
-  marginBottom: 12,
+  fontSize: '2.5rem',
+  fontWeight: 300,
+  color: '#ffffff',
+  marginBottom: 16,
+  letterSpacing: '-0.5px',
 };
 
 const cardFooter = {
   display: 'flex',
   alignItems: 'center',
-  justifyContent: 'space-between',
+  justifyContent: 'flex-start',
 };
 
 const badge = {
-  fontSize: 11,
+  fontSize: '0.7rem',
   fontWeight: 600,
-  color: '#10b981',
-  background: '#f0fdf4',
-  padding: '4px 10px',
-  borderRadius: 999,
+  padding: '5px 12px',
+  borderRadius: 2,
   textTransform: 'uppercase',
   letterSpacing: '0.5px',
 };
@@ -250,16 +370,16 @@ const statsSection = {
 };
 
 const sectionTitle = {
-  fontSize: 18,
-  fontWeight: 700,
-  color: '#0f172a',
-  marginBottom: 16,
-  fontFamily: 'var(--font-heading)',
+  fontSize: '1.1rem',
+  fontWeight: 500,
+  color: '#ffffff',
+  marginBottom: 20,
+  letterSpacing: '0.3px',
 };
 
 const statsGrid = {
   display: 'grid',
-  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
+  gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
   gap: 16,
 };
 
@@ -268,21 +388,21 @@ const statCard = {
   alignItems: 'center',
   gap: 16,
   padding: 20,
-  background: '#f8fafc',
-  borderRadius: 12,
-  border: '1px solid #e5e7eb',
+  background: 'rgba(255, 255, 255, 0.02)',
+  borderRadius: 2,
+  border: '1px solid rgba(255, 255, 255, 0.08)',
+  transition: 'all 0.2s ease',
+  cursor: 'pointer',
 };
 
 const statIcon = {
-  fontSize: 32,
-  width: 56,
-  height: 56,
+  width: 60,
+  height: 60,
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  background: '#fff',
-  borderRadius: 12,
-  boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
+  borderRadius: 2,
+  flexShrink: 0,
 };
 
 const statInfo = {
@@ -290,13 +410,17 @@ const statInfo = {
 };
 
 const statLabel = {
-  fontSize: 13,
-  color: '#64748b',
-  marginBottom: 4,
+  fontSize: '0.8rem',
+  color: 'rgba(255, 255, 255, 0.5)',
+  marginBottom: 6,
+  fontWeight: 400,
+  textTransform: 'uppercase',
+  letterSpacing: '0.5px',
 };
 
 const statValue = {
-  fontSize: 20,
-  fontWeight: 700,
-  color: '#0f172a',
+  fontSize: '1.4rem',
+  fontWeight: 500,
+  color: '#ffffff',
+  letterSpacing: '0.2px',
 };

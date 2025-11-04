@@ -1,120 +1,227 @@
 import React from 'react';
 import { NavLink, Outlet } from 'react-router-dom';
+import { BarChart3, Users, Key, Shield, Settings, Activity } from 'lucide-react';
 
 const navItems = [
-  { to: '/admin', label: 'Inicio', icon: '📊', end: true },
-  { to: '/admin/usuarios', label: 'Usuarios', icon: '👥' },
-  { to: '/admin/roles', label: 'Roles', icon: '🔑' },
-  { to: '/admin/seguridad', label: 'Seguridad', icon: '🛡️' },
-  { to: '/admin/configuracion', label: 'Configuración', icon: '⚙️' },
+  { to: '/admin', label: 'Inicio', Icon: BarChart3, end: true },
+  { to: '/admin/usuarios', label: 'Usuarios', Icon: Users },
+  { to: '/admin/roles', label: 'Roles', Icon: Key },
+  { to: '/admin/seguridad', label: 'Seguridad', Icon: Shield },
+  { to: '/admin/configuracion', label: 'Configuración', Icon: Settings },
 ];
-
-const linkStyle = ({ isActive }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  gap: 12,
-  padding: '12px 16px',
-  marginBottom: 6,
-  borderRadius: 12,
-  background: isActive ? 'linear-gradient(135deg, #0ea5e9, #22d3ee)' : 'transparent',
-  color: isActive ? '#fff' : '#64748b',
-  textDecoration: 'none',
-  fontWeight: isActive ? 600 : 500,
-  fontSize: 15,
-  transition: 'all 0.2s ease',
-  border: isActive ? 'none' : '1px solid transparent',
-});
 
 export default function AdminLayout() {
   return (
-    <div style={container}>
-      {/* Sidebar */}
-      <aside style={sidebar}>
-        <div style={header}>
-          <div style={logo}>👨‍⚕️</div>
-          <h3 style={title}>Admin Panel</h3>
-        </div>
+    <>
+      <style>{`
+        @keyframes slideIn {
+          from {
+            opacity: 0;
+            transform: translateX(-20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateX(0);
+          }
+        }
         
-        <nav style={nav}>
-          {navItems.map(item => (
-            <NavLink 
-              key={item.to} 
-              to={item.to} 
-              end={item.end} 
-              style={linkStyle}
-            >
-              <span style={{ fontSize: 18 }}>{item.icon}</span>
-              <span>{item.label}</span>
-            </NavLink>
-          ))}
-        </nav>
-      </aside>
+        .nav-link {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px 16px;
+          margin-bottom: 4px;
+          border-radius: 2px;
+          background: transparent;
+          color: rgba(255, 255, 255, 0.6);
+          text-decoration: none;
+          font-weight: 400;
+          font-size: 0.9rem;
+          transition: all 0.15s ease;
+          border: 1px solid transparent;
+          letter-spacing: 0.2px;
+          position: relative;
+          overflow: hidden;
+        }
+        
+        .nav-link::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          height: 100%;
+          width: 3px;
+          background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+          transform: scaleY(0);
+          transition: transform 0.2s ease;
+        }
+        
+        .nav-link:hover:not(.active) {
+          background: rgba(255, 255, 255, 0.05);
+          border-color: rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.9);
+        }
+        
+        .nav-link.active {
+          background: linear-gradient(135deg, #0066cc 0%, #0052a3 100%);
+          color: #fff;
+          font-weight: 500;
+          box-shadow: 0 4px 12px rgba(0, 102, 204, 0.3);
+        }
+        
+        .nav-link.active::before {
+          transform: scaleY(1);
+        }
+        
+        .nav-link svg {
+          transition: transform 0.2s ease;
+        }
+        
+        .nav-link:hover svg {
+          transform: scale(1.1);
+        }
+      `}</style>
 
-      {/* Main Content */}
-      <main style={main}>
-        <Outlet />
-      </main>
-    </div>
+      <div style={container}>
+        {/* Sidebar */}
+        <aside style={sidebar}>
+          <div style={header}>
+            <div style={logo}>
+              <Activity size={24} />
+            </div>
+            <div>
+              <h3 style={title}>Admin Panel</h3>
+              <p style={subtitle}>Clínica El Áncora</p>
+            </div>
+          </div>
+          
+          <nav style={nav}>
+            {navItems.map((item, idx) => {
+              const Icon = item.Icon;
+              return (
+                <NavLink 
+                  key={item.to} 
+                  to={item.to} 
+                  end={item.end} 
+                  className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}
+                  style={{
+                    animation: `slideIn 0.3s ease ${idx * 0.05}s backwards`,
+                  }}
+                >
+                  <Icon size={18} />
+                  <span>{item.label}</span>
+                </NavLink>
+              );
+            })}
+          </nav>
+
+          <div style={footer}>
+            <div style={statusDot} />
+            <span style={statusText}>Sistema operativo</span>
+          </div>
+        </aside>
+
+        {/* Main Content */}
+        <main style={main}>
+          <Outlet />
+        </main>
+      </div>
+    </>
   );
 }
 
 const container = {
   minHeight: '100vh',
-  background: 'linear-gradient(to bottom, #f8fafc 0%, #f1f5f9 100%)',
+  background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)',
   display: 'grid',
   gridTemplateColumns: '280px 1fr',
-  gap: 24,
-  padding: 24,
+  gap: 0,
 };
 
 const sidebar = {
-  background: '#fff',
-  borderRadius: 20,
-  padding: 24,
-  boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-  height: 'fit-content',
+  background: 'linear-gradient(180deg, rgba(26, 29, 41, 0.8) 0%, rgba(10, 14, 26, 0.8) 100%)',
+  backdropFilter: 'blur(10px)',
+  padding: '28px 20px',
+  borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+  height: '100vh',
   position: 'sticky',
-  top: 24,
+  top: 0,
+  display: 'flex',
+  flexDirection: 'column',
+  boxShadow: '4px 0 20px rgba(0, 0, 0, 0.2)',
 };
 
 const header = {
   display: 'flex',
   alignItems: 'center',
-  gap: 12,
+  gap: 14,
   marginBottom: 32,
   paddingBottom: 24,
-  borderBottom: '1px solid #e5e7eb',
+  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
 };
 
 const logo = {
   width: 48,
   height: 48,
-  borderRadius: 12,
-  background: 'linear-gradient(135deg, #0ea5e9, #22d3ee)',
+  borderRadius: 2,
+  background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
-  fontSize: 24,
-  boxShadow: '0 8px 18px rgba(14,165,233,0.25)',
+  color: '#fff',
+  boxShadow: '0 8px 20px rgba(0, 102, 204, 0.4)',
+  transition: 'transform 0.2s ease',
+  cursor: 'pointer',
 };
 
 const title = {
   margin: 0,
-  fontSize: 20,
-  fontWeight: 700,
-  color: '#0f172a',
-  fontFamily: 'var(--font-heading)',
+  fontSize: '1.1rem',
+  fontWeight: 500,
+  color: '#ffffff',
+  letterSpacing: '0.3px',
+};
+
+const subtitle = {
+  margin: '2px 0 0 0',
+  fontSize: '0.7rem',
+  color: 'rgba(255, 255, 255, 0.4)',
+  fontWeight: 300,
+  letterSpacing: '0.3px',
 };
 
 const nav = {
   display: 'flex',
   flexDirection: 'column',
+  flex: 1,
+};
+
+const footer = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 8,
+  paddingTop: 20,
+  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+  marginTop: 'auto',
+};
+
+const statusDot = {
+  width: 8,
+  height: 8,
+  borderRadius: '50%',
+  background: '#10b981',
+  boxShadow: '0 0 10px rgba(16, 185, 129, 0.5)',
+  animation: 'pulse 2s ease-in-out infinite',
+};
+
+const statusText = {
+  fontSize: '0.75rem',
+  color: 'rgba(255, 255, 255, 0.5)',
+  fontWeight: 400,
 };
 
 const main = {
-  background: '#fff',
-  borderRadius: 20,
-  padding: 32,
-  boxShadow: '0 4px 16px rgba(0,0,0,0.04)',
-  minHeight: 'calc(100vh - 48px)',
+  padding: 0,
+  minHeight: '100vh',
+  overflow: 'auto',
 };
