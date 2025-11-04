@@ -4,10 +4,12 @@ import { useAuth } from "../context/AuthContext.jsx";
 import { useNavigate, Link } from "react-router-dom";
 import ForgotPasswordModal from "../components/ForgotPasswordModal.jsx";
 import { motion } from "framer-motion";
+import { Eye, EyeOff } from "lucide-react";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [msg, setMsg] = useState("");
   const [forgotOpen, setForgotOpen] = useState(false);
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
@@ -28,9 +30,9 @@ export default function Login() {
     try {
       const { data } = await api.post("/auth/login", { correo: email, password });
       login({ token: data.token, usuario: data.usuario, rol: data.rol });
-      if (data.rol === 1) navigate("/admin/usuarios");
+      if (data.rol === 1) navigate("/admin");
       else if (data.rol === 2) navigate("/optometrista/agenda");
-      else navigate("/");
+      else navigate("/paciente");
     } catch (e) {
       setMsg(e.response?.data?.error || "Error al iniciar sesión");
     }
@@ -38,7 +40,6 @@ export default function Login() {
 
   return (
     <>
-      {/* estilos locales de la pantalla (gradientes/animaciones) */}
       <style>{`
         @keyframes float {
           0% { transform: translateY(0px) }
@@ -62,6 +63,27 @@ export default function Login() {
           outline:none; transition: box-shadow .2s, border-color .2s; background:#fff;
         }
         .field:focus { border-color:#22d3ee; box-shadow: 0 0 0 4px rgba(34,211,238,.15); }
+        .password-wrapper {
+          position: relative;
+          width: 100%;
+        }
+        .password-toggle {
+          position: absolute;
+          right: 12px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          color: #64748b;
+          transition: color 0.2s;
+        }
+        .password-toggle:hover {
+          color: #0ea5e9;
+        }
         .btn-primary {
           display:inline-flex; align-items:center; justify-content:center;
           padding:12px 14px; border-radius:12px; border:none; cursor:pointer;
@@ -108,7 +130,6 @@ export default function Login() {
             position: "relative",
           }}
         >
-          {/* Grid principal: banner + formulario */}
           <div
             style={{
               display: "grid",
@@ -116,7 +137,6 @@ export default function Login() {
               gap: 0,
             }}
           >
-            {/* LADO IZQUIERDO (branding) */}
             {!isMobile && (
               <div
                 style={{
@@ -197,7 +217,6 @@ export default function Login() {
               </div>
             )}
 
-            {/* LADO DERECHO (formulario) */}
             <div style={{ 
               padding: isMobile ? 20 : 28,
               display: "flex",
@@ -266,15 +285,26 @@ export default function Login() {
                   }}>
                     Contraseña
                   </label>
-                  <input
-                    className="field"
-                    type="password"
-                    placeholder="••••••••"
-                    autoComplete="current-password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                    required
-                  />
+                  <div className="password-wrapper">
+                    <input
+                      className="field"
+                      type={showPassword ? "text" : "password"}
+                      placeholder="••••••••"
+                      autoComplete="current-password"
+                      value={password}
+                      onChange={(e) => setPassword(e.target.value)}
+                      style={{ paddingRight: 40 }}
+                      required
+                    />
+                    <button
+                      type="button"
+                      className="password-toggle"
+                      onClick={() => setShowPassword(!showPassword)}
+                      aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+                    >
+                      {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+                    </button>
+                  </div>
                   <div style={{ marginTop: 6 }}>
                     <button
                       type="button"

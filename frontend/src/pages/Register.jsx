@@ -1,15 +1,17 @@
 import React, { useEffect, useState } from "react";
 import { api } from "../services/api";
 import { motion, AnimatePresence } from "framer-motion";
-import { User2, Mail, Lock, CheckCircle2, ShieldCheck, TimerReset, Loader2 } from "lucide-react";
+import { User2, Mail, Lock, CheckCircle2, ShieldCheck, TimerReset, Loader2, Eye, EyeOff } from "lucide-react";
 
 export default function Register() {
-  const [step, setStep] = useState("form"); // form | code | done
+  const [step, setStep] = useState("form");
   const [loading, setLoading] = useState(false);
   const [msg, setMsg] = useState("");
   const [countdown, setCountdown] = useState(5);
   const [code, setCode] = useState("");
   const [isMobile, setIsMobile] = useState(window.innerWidth <= 768);
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
 
   const [form, setForm] = useState({
     nombre: "",
@@ -84,7 +86,6 @@ export default function Register() {
       minHeight: isMobile ? "calc(100vh - 120px)" : "60vh",
       padding: isMobile ? "20px 12px" : "40px 20px",
     }}>
-      {/* Glow background */}
       <div style={gradientBlob} />
       <div style={gradientBlob2} />
 
@@ -193,23 +194,26 @@ export default function Register() {
                 isMobile={isMobile}
               />
 
-              <Field
+              <PasswordField
                 icon={<Lock size={isMobile ? 16 : 18} />}
                 placeholder="Contraseña (min 6, 1 número y 1 especial)"
                 name="password"
-                type="password"
                 value={form.password}
                 onChange={onChange}
                 isMobile={isMobile}
+                showPassword={showPassword}
+                onToggle={() => setShowPassword(!showPassword)}
               />
-              <Field
+              
+              <PasswordField
                 icon={<Lock size={isMobile ? 16 : 18} />}
                 placeholder="Confirmar contraseña"
                 name="confirmPassword"
-                type="password"
                 value={form.confirmPassword}
                 onChange={onChange}
                 isMobile={isMobile}
+                showPassword={showConfirmPassword}
+                onToggle={() => setShowConfirmPassword(!showConfirmPassword)}
               />
 
               <PasswordHints ok={isStrongPassword(form.password)} isMobile={isMobile} />
@@ -348,9 +352,7 @@ export default function Register() {
 
 function Field({ icon, isMobile, ...rest }) {
   return (
-    <div style={{
-      ...fieldWrap,
-    }}>
+    <div style={fieldWrap}>
       <div style={{
         ...fieldIcon,
         width: isMobile ? 24 : 28,
@@ -363,6 +365,37 @@ function Field({ icon, isMobile, ...rest }) {
         padding: isMobile ? "10px 12px 10px 40px" : "12px 12px 12px 48px",
         fontSize: isMobile ? "0.9rem" : "0.95rem",
       }} />
+    </div>
+  );
+}
+
+function PasswordField({ icon, isMobile, showPassword, onToggle, ...rest }) {
+  return (
+    <div style={fieldWrap}>
+      <div style={{
+        ...fieldIcon,
+        width: isMobile ? 24 : 28,
+        height: isMobile ? 24 : 28,
+      }}>
+        {icon}
+      </div>
+      <input 
+        {...rest} 
+        type={showPassword ? "text" : "password"}
+        style={{
+          ...inputBase,
+          padding: isMobile ? "10px 40px 10px 40px" : "12px 48px 12px 48px",
+          fontSize: isMobile ? "0.9rem" : "0.95rem",
+        }} 
+      />
+      <button
+        type="button"
+        onClick={onToggle}
+        style={passwordToggle}
+        aria-label={showPassword ? "Ocultar contraseña" : "Mostrar contraseña"}
+      >
+        {showPassword ? <EyeOff size={isMobile ? 16 : 18} /> : <Eye size={isMobile ? 16 : 18} />}
+      </button>
     </div>
   );
 }
@@ -474,6 +507,19 @@ const fieldIcon = {
   border: "1px solid rgba(0,0,0,.06)",
 };
 
+const passwordToggle = {
+  position: "absolute",
+  right: 12,
+  background: "none",
+  border: "none",
+  cursor: "pointer",
+  padding: 4,
+  display: "flex",
+  alignItems: "center",
+  color: "#64748b",
+  transition: "color 0.2s",
+};
+
 const inputBase = {
   width: "100%",
   borderRadius: 12,
@@ -492,7 +538,6 @@ const btnPrimary = {
   width: "100%",
 };
 
-/* pequeñito spinner (usa className="spin") */
 const style = document.createElement("style");
-style.innerHTML = `.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}} input:focus{box-shadow:0 0 0 4px rgba(14,165,233,.15);border-color:#93c5fd}`;
+style.innerHTML = `.spin{animation:spin 1s linear infinite}@keyframes spin{to{transform:rotate(360deg)}} input:focus{box-shadow:0 0 0 4px rgba(14,165,233,.15);border-color:#93c5fd} button[type="button"]:hover{color:#0ea5e9}`;
 document.head.appendChild(style);
