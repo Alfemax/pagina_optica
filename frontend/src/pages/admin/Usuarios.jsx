@@ -87,11 +87,11 @@ export default function Usuarios() {
   }
 
   const inputStyle = {
-    background: 'rgba(255, 255, 255, 0.03)',
-    border: '1px solid rgba(255, 255, 255, 0.08)',
+    background: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
     borderRadius: 2,
     padding: '10px 14px',
-    color: '#ffffff',
+    color: '#1a1d29',
     fontSize: '0.9rem',
     outline: 'none',
     transition: 'all 0.2s ease',
@@ -99,11 +99,11 @@ export default function Usuarios() {
   };
 
   const buttonStyle = {
-    background: 'rgba(255, 255, 255, 0.05)',
-    border: '1px solid rgba(255, 255, 255, 0.1)',
+    background: '#ffffff',
+    border: '1px solid rgba(0, 0, 0, 0.12)',
     borderRadius: 2,
     padding: '10px 18px',
-    color: '#ffffff',
+    color: '#1a1d29',
     fontSize: '0.85rem',
     fontWeight: 500,
     cursor: 'pointer',
@@ -118,15 +118,16 @@ export default function Usuarios() {
     ...buttonStyle,
     background: 'linear-gradient(135deg, #0066cc 0%, #0052a3 100%)',
     border: 'none',
+    color: '#ffffff',
     boxShadow: '0 4px 12px rgba(0, 102, 204, 0.3)',
   };
 
   return (
     <div style={{ 
-      background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)',
+      background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
       minHeight: '100vh',
       padding: '32px',
-      color: '#ffffff',
+      color: '#1a1d29',
     }}>
       <style>{`
         input:focus, select:focus {
@@ -134,7 +135,7 @@ export default function Usuarios() {
           box-shadow: 0 0 0 3px rgba(0, 102, 204, 0.1) !important;
         }
         select {
-          background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%23ffffff' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
+          background-image: url("data:image/svg+xml,%3Csvg width='12' height='8' viewBox='0 0 12 8' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M1 1.5L6 6.5L11 1.5' stroke='%231a1d29' stroke-width='1.5' stroke-linecap='round'/%3E%3C/svg%3E");
           background-repeat: no-repeat;
           background-position: right 12px center;
           padding-right: 36px;
@@ -157,7 +158,7 @@ export default function Usuarios() {
         gap: 16, 
         marginBottom: 32,
         paddingBottom: 24,
-        borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+        borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
       }}>
         <div style={{
           width: 48,
@@ -167,6 +168,7 @@ export default function Usuarios() {
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          color: '#ffffff',
         }}>
           <Users size={24} />
         </div>
@@ -180,7 +182,7 @@ export default function Usuarios() {
           <p style={{ 
             margin: '4px 0 0 0',
             fontSize: '0.85rem',
-            color: 'rgba(255, 255, 255, 0.5)',
+            color: 'rgba(0, 0, 0, 0.5)',
             fontWeight: 300,
           }}>
             {total} usuarios registrados
@@ -189,18 +191,19 @@ export default function Usuarios() {
       </div>
 
       <div style={{ 
-        display: 'flex', 
+        display: 'grid',
+        gridTemplateColumns: '1fr auto auto auto',
         gap: 12, 
         marginBottom: 24,
-        flexWrap: 'wrap',
+        alignItems: 'center',
       }}>
-        <div style={{ position: 'relative', flex: '1 1 300px' }}>
+        <div style={{ position: 'relative' }}>
           <Search size={18} style={{ 
             position: 'absolute', 
             left: 14, 
             top: '50%', 
             transform: 'translateY(-50%)',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: 'rgba(0, 0, 0, 0.4)',
           }} />
           <input 
             placeholder="Buscar por nombre o correo" 
@@ -230,13 +233,11 @@ export default function Usuarios() {
           style={buttonStyle}
           onClick={onSearch} 
           disabled={loading}
-          onMouseEnter={e => !loading && (e.target.style.background = 'rgba(255, 255, 255, 0.08)')}
-          onMouseLeave={e => !loading && (e.target.style.background = 'rgba(255, 255, 255, 0.05)')}
+          onMouseEnter={e => !loading && (e.target.style.background = '#f8f9fa')}
+          onMouseLeave={e => !loading && (e.target.style.background = '#ffffff')}
         >
           {loading ? 'Cargando…' : 'Buscar'}
         </button>
-
-        <div style={{ flex: 1 }} />
 
         <button 
           style={primaryButtonStyle}
@@ -250,21 +251,23 @@ export default function Usuarios() {
       </div>
 
       <div style={{ 
-        background: 'rgba(255, 255, 255, 0.02)',
-        border: '1px solid rgba(255, 255, 255, 0.08)',
+        background: '#ffffff',
+        border: '1px solid rgba(0, 0, 0, 0.08)',
         borderRadius: 2,
         overflow: 'hidden',
+        boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
       }}>
         <div style={{ 
           display: 'grid', 
           gridTemplateColumns: '80px 1.2fr 1.4fr 140px 100px 240px', 
           padding: '16px 20px',
-          background: 'rgba(255, 255, 255, 0.03)',
+          background: '#f8f9fa',
           fontSize: '0.8rem',
           fontWeight: 500,
-          color: 'rgba(255, 255, 255, 0.6)',
+          color: 'rgba(0, 0, 0, 0.6)',
           letterSpacing: '0.5px',
           textTransform: 'uppercase',
+          borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
         }}>
           <div>ID</div>
           <div>Nombre</div>
@@ -281,25 +284,25 @@ export default function Usuarios() {
               display: 'grid', 
               gridTemplateColumns: '80px 1.2fr 1.4fr 140px 100px 240px', 
               padding: '16px 20px',
-              borderTop: '1px solid rgba(255, 255, 255, 0.05)',
+              borderTop: '1px solid rgba(0, 0, 0, 0.05)',
               transition: 'background 0.2s ease',
             }}
-            onMouseEnter={e => e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)'}
+            onMouseEnter={e => e.currentTarget.style.background = '#f8f9fa'}
             onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
           >
             <div style={{ 
               fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.5)',
+              color: 'rgba(0, 0, 0, 0.5)',
             }}>#{u.id_usuario}</div>
             <div style={{ fontWeight: 500 }}>{u.usuario}</div>
-            <div style={{ color: 'rgba(255, 255, 255, 0.7)' }}>{u.correo}</div>
+            <div style={{ color: 'rgba(0, 0, 0, 0.7)' }}>{u.correo}</div>
             <div>
               <span style={{
                 padding: '4px 10px',
                 borderRadius: 2,
                 fontSize: '0.75rem',
-                background: 'rgba(0, 102, 204, 0.15)',
-                color: '#6ba3ff',
+                background: 'rgba(0, 102, 204, 0.1)',
+                color: '#0066cc',
                 fontWeight: 500,
               }}>
                 {roles.find(r=>r.id===u.id_rol)?.label || u.id_rol}
@@ -334,8 +337,8 @@ export default function Usuarios() {
                   fontSize: '0.8rem',
                 }}
                 onClick={()=>openEdit(u)}
-                onMouseEnter={e => e.target.style.background = 'rgba(255, 255, 255, 0.08)'}
-                onMouseLeave={e => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
+                onMouseEnter={e => e.target.style.background = '#f8f9fa'}
+                onMouseLeave={e => e.target.style.background = '#ffffff'}
               >
                 <Edit2 size={14} />
               </button>
@@ -346,8 +349,8 @@ export default function Usuarios() {
                   fontSize: '0.8rem',
                 }}
                 onClick={()=>openChangePass(u)}
-                onMouseEnter={e => e.target.style.background = 'rgba(255, 255, 255, 0.08)'}
-                onMouseLeave={e => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
+                onMouseEnter={e => e.target.style.background = '#f8f9fa'}
+                onMouseLeave={e => e.target.style.background = '#ffffff'}
               >
                 <Key size={14} />
               </button>
@@ -356,17 +359,17 @@ export default function Usuarios() {
                   ...buttonStyle,
                   padding: '8px 12px',
                   fontSize: '0.8rem',
-                  background: 'rgba(239, 68, 68, 0.15)',
+                  background: 'rgba(239, 68, 68, 0.1)',
                   borderColor: 'rgba(239, 68, 68, 0.3)',
                   color: '#ef4444',
                 }}
                 onClick={()=>removeUser(u.id_usuario)}
                 onMouseEnter={e => {
-                  e.target.style.background = 'rgba(239, 68, 68, 0.25)';
+                  e.target.style.background = 'rgba(239, 68, 68, 0.15)';
                   e.target.style.borderColor = 'rgba(239, 68, 68, 0.4)';
                 }}
                 onMouseLeave={e => {
-                  e.target.style.background = 'rgba(239, 68, 68, 0.15)';
+                  e.target.style.background = 'rgba(239, 68, 68, 0.1)';
                   e.target.style.borderColor = 'rgba(239, 68, 68, 0.3)';
                 }}
               >
@@ -380,7 +383,7 @@ export default function Usuarios() {
           <div style={{ 
             padding: 48,
             textAlign: 'center',
-            color: 'rgba(255, 255, 255, 0.4)',
+            color: 'rgba(0, 0, 0, 0.4)',
             fontSize: '0.9rem',
           }}>
             Sin resultados
@@ -396,7 +399,7 @@ export default function Usuarios() {
         marginTop: 20,
       }}>
         <small style={{ 
-          color: 'rgba(255, 255, 255, 0.5)',
+          color: 'rgba(0, 0, 0, 0.5)',
           fontSize: '0.85rem',
           fontWeight: 300,
         }}>
@@ -406,8 +409,8 @@ export default function Usuarios() {
           style={buttonStyle}
           disabled={page<=1} 
           onClick={()=>{ setPage(p=>p-1); load(page-1); }}
-          onMouseEnter={e => page > 1 && (e.target.style.background = 'rgba(255, 255, 255, 0.08)')}
-          onMouseLeave={e => page > 1 && (e.target.style.background = 'rgba(255, 255, 255, 0.05)')}
+          onMouseEnter={e => page > 1 && (e.target.style.background = '#f8f9fa')}
+          onMouseLeave={e => page > 1 && (e.target.style.background = '#ffffff')}
         >
           <ChevronLeft size={16} />
           Anterior
@@ -416,8 +419,8 @@ export default function Usuarios() {
           style={buttonStyle}
           disabled={page>=pages} 
           onClick={()=>{ setPage(p=>p+1); load(page+1); }}
-          onMouseEnter={e => page < pages && (e.target.style.background = 'rgba(255, 255, 255, 0.08)')}
-          onMouseLeave={e => page < pages && (e.target.style.background = 'rgba(255, 255, 255, 0.05)')}
+          onMouseEnter={e => page < pages && (e.target.style.background = '#f8f9fa')}
+          onMouseLeave={e => page < pages && (e.target.style.background = '#ffffff')}
         >
           Siguiente
           <ChevronRight size={16} />
@@ -436,7 +439,7 @@ export default function Usuarios() {
               display: 'block', 
               marginBottom: 8,
               fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
             }}>
               Nombre
@@ -455,7 +458,7 @@ export default function Usuarios() {
               display: 'block', 
               marginBottom: 8,
               fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
             }}>
               Correo electrónico
@@ -476,7 +479,7 @@ export default function Usuarios() {
                 display: 'block', 
                 marginBottom: 8,
                 fontSize: '0.85rem',
-                color: 'rgba(255, 255, 255, 0.7)',
+                color: 'rgba(0, 0, 0, 0.7)',
                 fontWeight: 500,
               }}>
                 Contraseña
@@ -497,7 +500,7 @@ export default function Usuarios() {
               display: 'block', 
               marginBottom: 8,
               fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
             }}>
               Rol
@@ -538,8 +541,8 @@ export default function Usuarios() {
               type="button" 
               style={buttonStyle}
               onClick={()=>setOpenForm(false)}
-              onMouseEnter={e => e.target.style.background = 'rgba(255, 255, 255, 0.08)'}
-              onMouseLeave={e => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
+              onMouseEnter={e => e.target.style.background = '#f8f9fa'}
+              onMouseLeave={e => e.target.style.background = '#ffffff'}
             >
               Cancelar
             </button>
@@ -567,7 +570,7 @@ export default function Usuarios() {
               display: 'block', 
               marginBottom: 8,
               fontSize: '0.85rem',
-              color: 'rgba(255, 255, 255, 0.7)',
+              color: 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
             }}>
               Nueva contraseña
@@ -592,8 +595,8 @@ export default function Usuarios() {
               type="button" 
               style={buttonStyle}
               onClick={()=>setOpenPass(false)}
-              onMouseEnter={e => e.target.style.background = 'rgba(255, 255, 255, 0.08)'}
-              onMouseLeave={e => e.target.style.background = 'rgba(255, 255, 255, 0.05)'}
+              onMouseEnter={e => e.target.style.background = '#f8f9fa'}
+              onMouseLeave={e => e.target.style.background = '#ffffff'}
             >
               Cancelar
             </button>

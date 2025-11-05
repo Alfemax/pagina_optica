@@ -74,7 +74,7 @@ export default function Overview() {
           <p style={subtitle}>Resumen general del sistema</p>
         </div>
         <div style={dateBox}>
-          <Calendar size={18} style={{ color: 'rgba(255, 255, 255, 0.6)' }} />
+          <Calendar size={18} style={{ color: 'rgba(0, 0, 0, 0.6)' }} />
           <span style={dateText}>
             {new Date().toLocaleDateString('es-GT', { 
               weekday: 'long', 
@@ -102,7 +102,7 @@ export default function Overview() {
               }}
               onMouseLeave={e => {
                 e.currentTarget.style.transform = 'translateY(0)';
-                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.15)';
+                e.currentTarget.style.boxShadow = '0 4px 12px rgba(0,0,0,0.08)';
               }}
             >
               <div style={cardHeader}>
@@ -147,12 +147,12 @@ export default function Overview() {
           <div 
             style={statCard}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.background = 'rgba(14, 165, 233, 0.04)';
               e.currentTarget.style.borderColor = 'rgba(14, 165, 233, 0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.background = '#ffffff';
+              e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
             }}
           >
             <div style={{
@@ -171,12 +171,12 @@ export default function Overview() {
           <div 
             style={statCard}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.background = 'rgba(245, 158, 11, 0.04)';
               e.currentTarget.style.borderColor = 'rgba(245, 158, 11, 0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.background = '#ffffff';
+              e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
             }}
           >
             <div style={{
@@ -195,12 +195,12 @@ export default function Overview() {
           <div 
             style={statCard}
             onMouseEnter={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.04)';
+              e.currentTarget.style.background = 'rgba(16, 185, 129, 0.04)';
               e.currentTarget.style.borderColor = 'rgba(16, 185, 129, 0.3)';
             }}
             onMouseLeave={e => {
-              e.currentTarget.style.background = 'rgba(255, 255, 255, 0.02)';
-              e.currentTarget.style.borderColor = 'rgba(255, 255, 255, 0.08)';
+              e.currentTarget.style.background = '#ffffff';
+              e.currentTarget.style.borderColor = 'rgba(0, 0, 0, 0.08)';
             }}
           >
             <div style={{
@@ -223,10 +223,10 @@ export default function Overview() {
 
 // Styles
 const container = {
-  background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)',
+  background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
   minHeight: '100vh',
   padding: '32px',
-  color: '#ffffff',
+  color: '#1a1d29',
 };
 
 const loadingContainer = {
@@ -241,14 +241,14 @@ const loadingContainer = {
 const spinner = {
   width: 48,
   height: 48,
-  border: '4px solid rgba(255, 255, 255, 0.1)',
+  border: '4px solid rgba(0, 0, 0, 0.1)',
   borderTop: '4px solid #0066cc',
   borderRadius: '50%',
   animation: 'spin 1s linear infinite',
 };
 
 const loadingText = {
-  color: 'rgba(255, 255, 255, 0.6)',
+  color: 'rgba(0, 0, 0, 0.6)',
   fontSize: '0.9rem',
   margin: 0,
   fontWeight: 300,
@@ -261,7 +261,7 @@ const headerStyle = {
   alignItems: 'flex-start',
   marginBottom: 32,
   paddingBottom: 24,
-  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+  borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
   flexWrap: 'wrap',
   gap: 16,
 };
@@ -270,14 +270,14 @@ const mainTitle = {
   margin: 0,
   fontSize: '1.75rem',
   fontWeight: 300,
-  color: '#ffffff',
+  color: '#1a1d29',
   letterSpacing: '0.5px',
 };
 
 const subtitle = {
   margin: '8px 0 0 0',
   fontSize: '0.85rem',
-  color: 'rgba(255, 255, 255, 0.5)',
+  color: 'rgba(0, 0, 0, 0.5)',
   fontWeight: 300,
 };
 
@@ -286,14 +286,15 @@ const dateBox = {
   alignItems: 'center',
   gap: 10,
   padding: '10px 16px',
-  background: 'rgba(255, 255, 255, 0.03)',
+  background: '#ffffff',
   borderRadius: 2,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
 };
 
 const dateText = {
   fontSize: '0.8rem',
-  color: 'rgba(255, 255, 255, 0.7)',
+  color: 'rgba(0, 0, 0, 0.7)',
   fontWeight: 400,
   textTransform: 'capitalize',
 };
@@ -307,11 +308,11 @@ const grid = {
 
 const cardStyle = {
   position: 'relative',
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: '#ffffff',
   borderRadius: 2,
   padding: 24,
-  boxShadow: '0 4px 12px rgba(0,0,0,0.15)',
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
   transition: 'all 0.3s cubic-bezier(0.4, 0, 0.2, 1)',
   cursor: 'pointer',
   overflow: 'hidden',
@@ -336,7 +337,7 @@ const iconBox = {
 
 const cardTitle = {
   fontSize: '0.8rem',
-  color: 'rgba(255, 255, 255, 0.6)',
+  color: 'rgba(0, 0, 0, 0.6)',
   fontWeight: 500,
   letterSpacing: '0.5px',
   textTransform: 'uppercase',
@@ -345,7 +346,7 @@ const cardTitle = {
 const cardValue = {
   fontSize: '2.5rem',
   fontWeight: 300,
-  color: '#ffffff',
+  color: '#1a1d29',
   marginBottom: 16,
   letterSpacing: '-0.5px',
 };
@@ -372,7 +373,7 @@ const statsSection = {
 const sectionTitle = {
   fontSize: '1.1rem',
   fontWeight: 500,
-  color: '#ffffff',
+  color: '#1a1d29',
   marginBottom: 20,
   letterSpacing: '0.3px',
 };
@@ -388,11 +389,12 @@ const statCard = {
   alignItems: 'center',
   gap: 16,
   padding: 20,
-  background: 'rgba(255, 255, 255, 0.02)',
+  background: '#ffffff',
   borderRadius: 2,
-  border: '1px solid rgba(255, 255, 255, 0.08)',
+  border: '1px solid rgba(0, 0, 0, 0.08)',
   transition: 'all 0.2s ease',
   cursor: 'pointer',
+  boxShadow: '0 2px 8px rgba(0, 0, 0, 0.04)',
 };
 
 const statIcon = {
@@ -411,7 +413,7 @@ const statInfo = {
 
 const statLabel = {
   fontSize: '0.8rem',
-  color: 'rgba(255, 255, 255, 0.5)',
+  color: 'rgba(0, 0, 0, 0.5)',
   marginBottom: 6,
   fontWeight: 400,
   textTransform: 'uppercase',
@@ -421,6 +423,6 @@ const statLabel = {
 const statValue = {
   fontSize: '1.4rem',
   fontWeight: 500,
-  color: '#ffffff',
+  color: '#1a1d29',
   letterSpacing: '0.2px',
 };

@@ -33,7 +33,7 @@ export default function AdminLayout() {
           margin-bottom: 4px;
           border-radius: 2px;
           background: transparent;
-          color: rgba(255, 255, 255, 0.6);
+          color: rgba(0, 0, 0, 0.6);
           text-decoration: none;
           font-weight: 400;
           font-size: 0.9rem;
@@ -57,9 +57,9 @@ export default function AdminLayout() {
         }
         
         .nav-link:hover:not(.active) {
-          background: rgba(255, 255, 255, 0.05);
-          border-color: rgba(255, 255, 255, 0.1);
-          color: rgba(255, 255, 255, 0.9);
+          background: rgba(0, 102, 204, 0.08);
+          border-color: rgba(0, 102, 204, 0.15);
+          color: rgba(0, 0, 0, 0.9);
         }
         
         .nav-link.active {
@@ -132,23 +132,23 @@ export default function AdminLayout() {
 
 const container = {
   minHeight: '100vh',
-  background: 'linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)',
+  background: 'linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%)',
   display: 'grid',
   gridTemplateColumns: '280px 1fr',
   gap: 0,
 };
 
 const sidebar = {
-  background: 'linear-gradient(180deg, rgba(26, 29, 41, 0.8) 0%, rgba(10, 14, 26, 0.8) 100%)',
+  background: 'linear-gradient(180deg, #ffffff 0%, #f8f9fa 100%)',
   backdropFilter: 'blur(10px)',
   padding: '28px 20px',
-  borderRight: '1px solid rgba(255, 255, 255, 0.08)',
+  borderRight: '1px solid rgba(0, 0, 0, 0.08)',
   height: '100vh',
   position: 'sticky',
   top: 0,
   display: 'flex',
   flexDirection: 'column',
-  boxShadow: '4px 0 20px rgba(0, 0, 0, 0.2)',
+  boxShadow: '4px 0 20px rgba(0, 0, 0, 0.05)',
 };
 
 const header = {
@@ -157,7 +157,7 @@ const header = {
   gap: 14,
   marginBottom: 32,
   paddingBottom: 24,
-  borderBottom: '1px solid rgba(255, 255, 255, 0.08)',
+  borderBottom: '1px solid rgba(0, 0, 0, 0.08)',
 };
 
 const logo = {
@@ -178,14 +178,14 @@ const title = {
   margin: 0,
   fontSize: '1.1rem',
   fontWeight: 500,
-  color: '#ffffff',
+  color: '#1a1d29',
   letterSpacing: '0.3px',
 };
 
 const subtitle = {
   margin: '2px 0 0 0',
   fontSize: '0.7rem',
-  color: 'rgba(255, 255, 255, 0.4)',
+  color: 'rgba(0, 0, 0, 0.5)',
   fontWeight: 300,
   letterSpacing: '0.3px',
 };
@@ -201,7 +201,7 @@ const footer = {
   alignItems: 'center',
   gap: 8,
   paddingTop: 20,
-  borderTop: '1px solid rgba(255, 255, 255, 0.08)',
+  borderTop: '1px solid rgba(0, 0, 0, 0.08)',
   marginTop: 'auto',
 };
 
@@ -216,7 +216,7 @@ const statusDot = {
 
 const statusText = {
   fontSize: '0.75rem',
-  color: 'rgba(255, 255, 255, 0.5)',
+  color: 'rgba(0, 0, 0, 0.5)',
   fontWeight: 400,
 };
 
