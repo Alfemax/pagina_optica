@@ -3,10 +3,11 @@ import React, { useEffect, useState } from "react";
 import { DayPicker } from "react-day-picker";
 import { es } from "date-fns/locale";
 import { format, isBefore, isSunday, isAfter, addMonths } from "date-fns";
+import { Link } from "react-router-dom";
 import "react-day-picker/dist/style.css";
 import { pacienteApi } from "../services/pacienteApi";
 import { useAuth } from "../context/AuthContext.jsx";
-import { Calendar, Clock, CheckCircle2, AlertCircle, Loader2 } from "lucide-react";
+import { Calendar, Clock, CheckCircle2, AlertCircle, Loader2, LogIn, UserPlus } from "lucide-react";
 import { motion } from "framer-motion";
 
 export default function Citas() {
@@ -42,6 +43,7 @@ export default function Citas() {
       setTramo("");
       setSlots([]);
       if (!selected) return;
+      if (!token) return; // No cargar si no hay sesión
       try {
         setLoading(true);
         const date = format(selected, "yyyy-MM-dd");
@@ -54,7 +56,7 @@ export default function Citas() {
         setLoading(false);
       }
     })();
-  }, [selected]);
+  }, [selected, token]);
 
   async function reservar() {
     setMsg("");
@@ -71,6 +73,9 @@ export default function Citas() {
       const date = format(selected, "yyyy-MM-dd");
       await pacienteApi.book({ date, tramo });
       setMsg("✅ Cita reservada. Te contactaremos para confirmarla.");
+      setSelected(null);
+      setTramo("");
+      setSlots([]);
     } catch (e) {
       setMsg(e.response?.data?.error || "No se pudo reservar");
     } finally {
@@ -78,6 +83,157 @@ export default function Citas() {
     }
   }
 
+  // Guard: Si no hay sesión, mostrar mensaje de login
+  if (!token) {
+    return (
+      <div style={{
+        maxWidth: 600,
+        margin: "0 auto",
+        padding: isMobile ? "32px 16px" : "64px 20px",
+      }}>
+        <motion.div
+          initial={{ opacity: 0, scale: 0.95 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.4 }}
+          style={{
+            background: "linear-gradient(135deg, #0a0e1a 0%, #1a1d29 100%)",
+            borderRadius: 2,
+            padding: isMobile ? "32px 24px" : "48px 40px",
+            textAlign: "center",
+            border: "1px solid rgba(255, 255, 255, 0.08)",
+            boxShadow: "0 20px 50px rgba(0, 0, 0, 0.3)",
+            color: "#ffffff",
+          }}
+        >
+          <div style={{
+            width: 80,
+            height: 80,
+            margin: "0 auto 24px",
+            background: "linear-gradient(135deg, #0066cc 0%, #0052a3 100%)",
+            borderRadius: 2,
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            boxShadow: "0 10px 30px rgba(0, 102, 204, 0.4)",
+          }}>
+            <Calendar size={40} />
+          </div>
+
+          <h2 style={{
+            margin: "0 0 12px 0",
+            fontSize: isMobile ? "1.5rem" : "1.75rem",
+            fontWeight: 300,
+            letterSpacing: "0.5px",
+          }}>
+            Acceso Restringido
+          </h2>
+
+          <p style={{
+            margin: "0 0 32px 0",
+            fontSize: isMobile ? "0.9rem" : "1rem",
+            color: "rgba(255, 255, 255, 0.7)",
+            lineHeight: 1.6,
+            fontWeight: 300,
+          }}>
+            Debes iniciar sesión para acceder al sistema de gestión de citas.
+            <br />
+            Si aún no tienes una cuenta, puedes registrarte de forma gratuita.
+          </p>
+
+          <div style={{
+            display: "flex",
+            flexDirection: isMobile ? "column" : "row",
+            gap: 12,
+            justifyContent: "center",
+          }}>
+            <Link
+              to="/login"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+                padding: "14px 28px",
+                background: "linear-gradient(135deg, #0066cc 0%, #0052a3 100%)",
+                color: "#fff",
+                textDecoration: "none",
+                borderRadius: 2,
+                fontWeight: 500,
+                fontSize: isMobile ? "0.9rem" : "0.95rem",
+                letterSpacing: "0.3px",
+                boxShadow: "0 8px 20px rgba(0, 102, 204, 0.4)",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={e => {
+                e.target.style.transform = "translateY(-2px)";
+                e.target.style.boxShadow = "0 12px 28px rgba(0, 102, 204, 0.5)";
+              }}
+              onMouseLeave={e => {
+                e.target.style.transform = "translateY(0)";
+                e.target.style.boxShadow = "0 8px 20px rgba(0, 102, 204, 0.4)";
+              }}
+            >
+              <LogIn size={18} />
+              Iniciar Sesión
+            </Link>
+
+            <Link
+              to="/registro"
+              style={{
+                display: "inline-flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 10,
+                padding: "14px 28px",
+                background: "rgba(255, 255, 255, 0.05)",
+                color: "#fff",
+                textDecoration: "none",
+                borderRadius: 2,
+                fontWeight: 500,
+                fontSize: isMobile ? "0.9rem" : "0.95rem",
+                letterSpacing: "0.3px",
+                border: "1px solid rgba(255, 255, 255, 0.1)",
+                transition: "all 0.2s ease",
+              }}
+              onMouseEnter={e => {
+                e.target.style.background = "rgba(255, 255, 255, 0.08)";
+                e.target.style.borderColor = "rgba(255, 255, 255, 0.2)";
+              }}
+              onMouseLeave={e => {
+                e.target.style.background = "rgba(255, 255, 255, 0.05)";
+                e.target.style.borderColor = "rgba(255, 255, 255, 0.1)";
+              }}
+            >
+              <UserPlus size={18} />
+              Registrarse
+            </Link>
+          </div>
+
+          <div style={{
+            marginTop: 32,
+            paddingTop: 24,
+            borderTop: "1px solid rgba(255, 255, 255, 0.08)",
+            fontSize: isMobile ? "0.8rem" : "0.85rem",
+            color: "rgba(255, 255, 255, 0.5)",
+            fontWeight: 300,
+          }}>
+            ¿Necesitas ayuda? Contáctanos en{" "}
+            <a
+              href="mailto:info@clinicaelancora.com"
+              style={{
+                color: "#0ea5e9",
+                textDecoration: "none",
+              }}
+            >
+              info@clinicaelancora.com
+            </a>
+          </div>
+        </motion.div>
+      </div>
+    );
+  }
+
+  // Vista normal con sesión iniciada
   return (
     <div style={{
       maxWidth: 1200,
@@ -209,6 +365,9 @@ export default function Citas() {
                   background: "#f8fafc",
                   border: "1px solid #e2e8f0",
                   fontSize: isMobile ? 13 : 14,
+                  display: "flex",
+                  alignItems: "center",
+                  gap: 8,
                 }}>
                   <Loader2 className="spin" size={16} /> Consultando disponibilidad…
                 </div>
